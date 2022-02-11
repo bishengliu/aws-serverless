@@ -39,6 +39,9 @@ const serverlessConfiguration: AWS = {
       platform: "node",
       concurrency: 10,
     },
+    deploymentBucket: {
+      blockPublicAccess: true,
+    },
     // # serverless-stack-output
     output: {
       handler: "deploy/output.handler",
