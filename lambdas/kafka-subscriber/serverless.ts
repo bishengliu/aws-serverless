@@ -3,7 +3,7 @@ import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
   service: "kafka-subscriber",
-  frameworkVersion: "2",
+  frameworkVersion: "3",
   plugins: [
     "serverless-esbuild",
     "serverless-offline",
