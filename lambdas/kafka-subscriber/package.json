@@ -12,7 +12,8 @@
   "dependencies": {
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
-    "esbuild": "^0.14.21"
+    "esbuild": "^0.14.21",
+    "serverless-stack-output": "^0.2.3"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
