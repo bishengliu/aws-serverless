@@ -1,5 +1,4 @@
 import type { AWS } from "@serverless/typescript";
-
 import hello from "@functions/hello";
 
 const serverlessConfiguration: AWS = {
@@ -23,6 +22,9 @@ const serverlessConfiguration: AWS = {
   functions: { hello },
   package: { individually: true },
   custom: {
+    stage: "${opt:stage, 'dev'}",
+    stack: "${self.service}-${self:custom.stage}",
+    config: "${file(deploy/config/${self:custom.stage}.yml)}",
     esbuild: {
       bundle: true,
       minify: false,
