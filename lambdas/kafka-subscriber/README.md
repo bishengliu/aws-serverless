@@ -51,6 +51,18 @@ curl --location --request POST 'https://myApiEndpoint/dev/hello' \
 }'
 ```
 
+### sls deploy
+
+```
+sls deploy -s dev --region eu-west-1
+```
+
+### sls remove
+
+```
+sls remove -s dev --region eu-west-1
+```
+
 ## Template features
 
 ### Project structure
