@@ -1,6 +1,6 @@
 import SchemaRegistryFactory from "@libs/kafka-utils/SchemaRegistryFactory";
 import { KafkaEvent } from "@libs/kafka.types";
-import { MiddlewareContext } from "@libs/types";
+import { MiddlewareContext } from "@libs/middlewares/middleware.types";
 import middy from "@middy/core";
 
 const defaults = {};

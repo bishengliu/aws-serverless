@@ -15,3 +15,12 @@ export type KafkaEvent = {
   eventSource: "SelfManagedKafka";
   records: KafkaRecordsByTopicAndPartition;
 };
+export type Json = Record<string, unknown>;
+
+export type DecodedKafkaField = string | Json;
+
+export type DecodedKafkaRecord = {
+  decodedKey: DecodedKafkaField;
+  decodedMessage: DecodedKafkaField;
+  record: KafkaRecord;
+};

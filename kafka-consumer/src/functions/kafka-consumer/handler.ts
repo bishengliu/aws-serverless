@@ -1,8 +1,11 @@
 import { KafkaEvent } from "@libs/kafka.types";
 import type { Context } from "aws-lambda";
+import middy from "@middy/core";
+import kafkaRegistryFactoryMiddleware from "@libs/middlewares/kafkaRegistryFactoryMiddleware";
 
-const handler = async (event: KafkaEvent, context: Context) => {
+const eventHandler = async (event: KafkaEvent, context: Context) => {
   // upon success publish to SNS
 };
 
-export default handler;
+export const handler = () =>
+  middy(eventHandler).use(kafkaRegistryFactoryMiddleware()); // create kafka schema registry
