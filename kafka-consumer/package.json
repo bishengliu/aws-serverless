@@ -12,8 +12,10 @@
     "node": ">=14.15.0"
   },
   "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^3.2.1",
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
+    "@middy/util": "^2.5.7",
     "esbuild": "^0.14.21",
     "serverless-stack-output": "^0.2.3"
   },
