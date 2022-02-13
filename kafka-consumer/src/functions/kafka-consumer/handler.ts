@@ -6,7 +6,10 @@ const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
 ) => {
-  // upon success publish to SNS
+  const recordGroups = Object.entries(event.records);
+  for (const [key, groupRecords] of recordGroups) {
+    console.log(key + ": " + groupRecords.length);
+  }
 };
 
 export const handler = () =>
