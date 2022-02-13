@@ -1,6 +1,5 @@
 import type { AWS } from "@serverless/typescript";
-import hello from "@functions/hello";
-import kafkaConsumer from "@functions/kafka-consumer";
+import { kafkaConsumer } from "@functions/kafka-consumer";
 
 const serverlessConfiguration: AWS = {
   service: "kafka-consumer",
