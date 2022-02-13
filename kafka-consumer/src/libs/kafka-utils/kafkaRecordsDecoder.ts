@@ -1,11 +1,11 @@
-import { DecodedKafkaRecord } from "./../kafka.types";
 import { DecodedKafkaField, KafkaRecord } from "../kafka.types";
 import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
-export const kafkaRecordsDecoder = async (
+
+export const decodeKafkaRecords = async (
   records: KafkaRecord[],
   schemaRegistry: SchemaRegistry
-) => {
-  const decodedRecords: DecodedKafkaRecord[] = [];
+): Promise<KafkaRecord[]> => {
+  const decodedRecords: KafkaRecord[] = [];
   for (const record of records) {
     const { key: base64EncodedKey, value: base64EncodedMessage } = record;
 
@@ -19,11 +19,12 @@ export const kafkaRecordsDecoder = async (
       schemaRegistry
     );
 
-    decodedRecords.push({
-      decodedKey,
-      decodedMessage,
-      record,
-    } as DecodedKafkaRecord);
+    const decodedRecord: KafkaRecord = {
+      ...record,
+      ...{ key: decodedKey, value: decodedMessage },
+    } as KafkaRecord;
+
+    decodedRecords.push(decodedRecord);
   }
 
   return decodedRecords;
