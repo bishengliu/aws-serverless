@@ -1,7 +1,7 @@
-import { KafkaRecordsByTopicAndPartition } from "./../kafka.types";
+import { KafkaRecordsByTopicAndPartition } from "../kafka.types";
 import { decodeKafkaRecords } from "@libs/kafka-utils/kafkaRecordsDecoder";
 import { KafkaEvent } from "@libs/kafka.types";
-import { MiddlewareContext } from "@libs/middlewares/middleware.types";
+import { KafkaConsumerContext } from "@libs/middlewares/middleware.types";
 import middy from "@middy/core";
 
 const defaults = {};
@@ -12,7 +12,7 @@ const kafkaEventDecodeMiddleware = (
   const options: Record<string, unknown> = { ...defaults, ...opts };
 
   const kafkaEventDecodeMiddlewareBefore = async (
-    handler: middy.HandlerLambda<KafkaEvent, void, MiddlewareContext>
+    handler: middy.HandlerLambda<KafkaEvent, void, KafkaConsumerContext>
   ) => {
     const schemaRegistry = handler.context.schemaRegistry;
     const { records } = handler.event;

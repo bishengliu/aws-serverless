@@ -1,9 +1,11 @@
 import { KafkaEvent } from "@libs/kafka.types";
-import type { Context } from "aws-lambda";
 import middy from "@middy/core";
 import kafkaRegistryFactoryMiddleware from "@libs/middlewares/kafkaRegistryFactoryMiddleware";
-
-const eventHandler = async (event: KafkaEvent, context: Context) => {
+import { KafkaConsumerContext } from "@libs/middlewares/middleware.types";
+const eventHandler = async (
+  event: KafkaEvent,
+  context: KafkaConsumerContext
+) => {
   // upon success publish to SNS
 };
 
