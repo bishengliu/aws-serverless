@@ -12,6 +12,7 @@
     "node": ">=14.15.0"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.51.0",
     "@kafkajs/confluent-schema-registry": "^3.2.1",
     "@middy/core": "^1.5.2",
     "@middy/http-json-body-parser": "^1.5.2",
