@@ -1,5 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 import hello from "@functions/hello";
+import kafkaConsumer from "@functions/kafka-consumer";
 
 const serverlessConfiguration: AWS = {
   service: "kafka-consumer",
@@ -23,7 +24,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: "20201221",
   },
   // import the function via paths
-  functions: { hello },
+  functions: { hello, kafkaConsumer },
   package: { individually: true },
   custom: {
     stage: "${opt:stage, 'dev'}",

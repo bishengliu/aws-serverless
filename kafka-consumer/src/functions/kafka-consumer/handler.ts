@@ -12,5 +12,5 @@ const eventHandler = async (
   }
 };
 
-export const handler = () =>
+export const main = () =>
   middy(eventHandler).use(kafkaRegistryFactoryMiddleware()); // create kafka schema registry
