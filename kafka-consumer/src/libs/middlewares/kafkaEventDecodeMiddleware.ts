@@ -1,5 +1,5 @@
-import { DecodedKafkaRecord } from "./../kafka.types";
-import { kafkaRecordsDecoder } from "@libs/kafka-utils/kafkaRecordsDecoder";
+import { KafkaRecordsByTopicAndPartition } from "./../kafka.types";
+import { decodeKafkaRecords } from "@libs/kafka-utils/kafkaRecordsDecoder";
 import { KafkaEvent } from "@libs/kafka.types";
 import { MiddlewareContext } from "@libs/middlewares/middleware.types";
 import middy from "@middy/core";
@@ -14,20 +14,19 @@ const kafkaEventDecodeMiddleware = (
   const kafkaEventDecodeMiddlewareBefore = async (
     handler: middy.HandlerLambda<KafkaEvent, void, MiddlewareContext>
   ) => {
-    const decodedRecordGroups: DecodedKafkaRecord[][] = [];
-
     const schemaRegistry = handler.context.schemaRegistry;
     const { records } = handler.event;
     const recordGroups = Object.entries(records);
 
-    for (const [, groupRecords] of recordGroups) {
-      const decodedRecords: DecodedKafkaRecord[] = await kafkaRecordsDecoder(
+    const decodedRecords = {} as KafkaRecordsByTopicAndPartition;
+
+    for (const [key, groupRecords] of recordGroups) {
+      decodedRecords[key] = await decodeKafkaRecords(
         groupRecords,
         schemaRegistry
       );
-      decodedRecordGroups.push(decodedRecords);
     }
-    handler.context.recordGroups = decodedRecordGroups;
+    handler.event.records = decodedRecords;
   };
 
   return {
