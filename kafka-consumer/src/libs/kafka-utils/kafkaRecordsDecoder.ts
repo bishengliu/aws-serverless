@@ -8,6 +8,7 @@ export const decodeKafkaRecords = async (
   const decodedRecords: KafkaRecord[] = [];
 
   for (const record of records) {
+    console.info("start to decode record:", record);
     const { key: base64EncodedKey, value: base64EncodedMessage } = record;
 
     try {
@@ -27,6 +28,8 @@ export const decodeKafkaRecords = async (
       } as KafkaRecord;
 
       decodedRecords.push(decodedRecord);
+
+      console.info("record decoded:", decodedRecord);
     } catch (error) {
       console.warn("Fail to decode kafka record", error); // todo:need to decide what to log/do
       continue;
