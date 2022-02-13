@@ -39,7 +39,7 @@ const serverlessConfiguration: AWS = {
       subnetIds: {
         "Fn::Split": [
           ",",
-          "${ssm:/terraform/vpc/subnets/private_service_subnets}",
+          "${ssm(raw):/terraform/vpc/subnets/private_service_subnets}",
         ],
       },
       securityGroupIds: [
@@ -51,12 +51,12 @@ const serverlessConfiguration: AWS = {
     vpcEndpointIds: ["${self:custom.vpc.endpoint}"],
     iam: {
       role: {
-        name: "${self:service}-${self:custom.stack}-lambda-role",
+        name: "${self:custom.stack}-role",
         statements: [
           {
             Effect: "Allow",
             Resource:
-              "${file(deploy/config/${self:custom.stage}.yml)}:custom.schemaRegistry.credentials",
+              "${file(deploy/config/${self:custom.stage}.yml):custom.schemaRegistry.credentials}",
             Action: "secretsmanager:GetSecretValue",
           },
           {
@@ -77,7 +77,7 @@ const serverlessConfiguration: AWS = {
   package: { individually: true },
   custom: {
     stage: "${opt:stage, 'poc'}",
-    stack: "${self.service}-${self:custom.stage}",
+    stack: "${self:service}-${self:custom.stage}",
     config: "${file(deploy/config/${self:custom.stage}.yml)}",
     esbuild: {
       bundle: true,
@@ -116,9 +116,7 @@ const serverlessConfiguration: AWS = {
             ToPort: 0,
             CidrIp: "0.0.0.0/0",
           },
-          Tags: {
-            Name: "egress-sg",
-          },
+          Tags: [{ Key: "Name", Value: "egress-sg" }],
         },
       },
     },

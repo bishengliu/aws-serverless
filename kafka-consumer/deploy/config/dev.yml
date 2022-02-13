@@ -1,5 +1,4 @@
 custom:
-  SCHEMA_REGISTRY_CREDENTIALS_ARN: 'value'
   kafka:
     bootstrapServers: pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092
     credentials:

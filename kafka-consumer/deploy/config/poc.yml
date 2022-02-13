@@ -1,5 +1,4 @@
 custom:
-  SCHEMA_REGISTRY_CREDENTIALS_ARN: 'value'
   kafka:
     bootstrapServers: pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092
     credentials:
@@ -10,6 +9,7 @@ custom:
 kafkaEvents:
   biochemical:
     accessConfigurations: 
-      saslPlainAuth: ${self:custom.kafka.credentials.consumer}
-    bootstrapServers: ${self:custom.kafka.bootstrapServers}
+      
+      saslPlainAuth: "arn:aws:secretsmanager:eu-west-1:250098771573:secret:/manual/yeti/kafka/confluent-dev-GRHIgz" # "${self:custom.kafka.credentials.consumer}"
+    bootstrapServers: "pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092" # "${self:custom.kafka.bootstrapServers}"
     topic: abcam.event.target.biochemical.sit
