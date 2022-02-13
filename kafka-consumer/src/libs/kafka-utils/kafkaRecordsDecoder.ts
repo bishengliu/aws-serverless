@@ -6,25 +6,31 @@ export const decodeKafkaRecords = async (
   schemaRegistry: SchemaRegistry
 ): Promise<KafkaRecord[]> => {
   const decodedRecords: KafkaRecord[] = [];
+
   for (const record of records) {
     const { key: base64EncodedKey, value: base64EncodedMessage } = record;
 
-    const decodedKey: DecodedKafkaField = await decodeKafkaField(
-      base64EncodedKey,
-      schemaRegistry
-    );
+    try {
+      const decodedKey: DecodedKafkaField = await decodeKafkaField(
+        base64EncodedKey,
+        schemaRegistry
+      );
 
-    const decodedMessage: DecodedKafkaField = await decodeKafkaField(
-      base64EncodedMessage,
-      schemaRegistry
-    );
+      const decodedMessage: DecodedKafkaField = await decodeKafkaField(
+        base64EncodedMessage,
+        schemaRegistry
+      );
 
-    const decodedRecord: KafkaRecord = {
-      ...record,
-      ...{ key: decodedKey, value: decodedMessage },
-    } as KafkaRecord;
+      const decodedRecord: KafkaRecord = {
+        ...record,
+        ...{ key: decodedKey, value: decodedMessage },
+      } as KafkaRecord;
 
-    decodedRecords.push(decodedRecord);
+      decodedRecords.push(decodedRecord);
+    } catch (error) {
+      console.warn("Fail to decode kafka record", error); // todo:need to decide what to log/do
+      continue;
+    }
   }
 
   return decodedRecords;
