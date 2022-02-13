@@ -1,4 +1,4 @@
-import { handlerPath } from "@libs/handlerResolver";
+import { handlerPath } from "@libs/lambda-utils";
 
 const event = {
   kafka: {

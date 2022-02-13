@@ -1,7 +1,11 @@
-import { KafkaEvent } from "@libs/kafka.types";
+import { KafkaEvent } from "@libs/types/kafka.types";
 import middy from "@middy/core";
-import kafkaRegistryFactoryMiddleware from "@libs/middlewares/kafkaRegistryFactoryMiddleware";
-import { KafkaConsumerContext } from "@libs/middlewares/middleware.types";
+import {
+  kafkaRegistryFactoryMiddleware,
+  kafkaEventDecodeMiddleware,
+  KafkaConsumerContext,
+} from "@libs/middlewares";
+
 const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
@@ -13,4 +17,6 @@ const eventHandler = async (
 };
 
 export const main = () =>
-  middy(eventHandler).use(kafkaRegistryFactoryMiddleware()); // create kafka schema registry
+  middy(eventHandler)
+    .use(kafkaRegistryFactoryMiddleware())
+    .use(kafkaEventDecodeMiddleware()); // create kafka schema registry

@@ -1,7 +1,9 @@
-import { KafkaRecordsByTopicAndPartition } from "../kafka.types";
-import { decodeKafkaRecords } from "@libs/kafka-utils/kafkaRecordsDecoder";
-import { KafkaEvent } from "@libs/kafka.types";
-import { KafkaConsumerContext } from "@libs/middlewares/middleware.types";
+import { decodeKafkaRecords } from "@libs/kafka-utils";
+import {
+  KafkaEvent,
+  KafkaRecordsByTopicAndPartition,
+} from "@libs/types/kafka.types";
+import { KafkaConsumerContext } from "@libs/middlewares";
 import middy from "@middy/core";
 
 const defaults = {};

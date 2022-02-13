@@ -1,4 +1,4 @@
-import { DecodedKafkaField, KafkaRecord } from "../kafka.types";
+import { DecodedKafkaField, KafkaRecord } from "../types/kafka.types";
 import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
 
 export const decodeKafkaRecords = async (

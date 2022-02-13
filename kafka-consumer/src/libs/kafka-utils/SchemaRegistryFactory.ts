@@ -1,5 +1,5 @@
 import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
-import fetchCredentials from "@libs/aws-utils/secreteManager";
+import { fetchCredentials } from "@libs/aws-utils";
 
 class SchemaRegistryFactory {
   public constructor() {}
