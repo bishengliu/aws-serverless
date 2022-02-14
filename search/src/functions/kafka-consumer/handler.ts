@@ -13,13 +13,16 @@ const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
 ) => {
+  logger.info("raw event from handler itself:", event);
+
   const recordGroups = Object.entries(event.records);
   for (const [key, groupRecords] of recordGroups) {
     logger.debug(key, groupRecords);
   }
 };
 
-export const main = () =>
-  middy(eventHandler)
-    .use(kafkaRegistryFactoryMiddleware())
-    .use(kafkaEventDecodeMiddleware()); // create kafka schema registry
+export const main = eventHandler;
+// export const main = () =>
+//   middy(eventHandler)
+//     .use(kafkaRegistryFactoryMiddleware())
+//     .use(kafkaEventDecodeMiddleware()); // create kafka schema registry
