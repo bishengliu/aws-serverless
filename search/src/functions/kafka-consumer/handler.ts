@@ -21,8 +21,6 @@ const eventHandler = async (
   }
 };
 
-export const main = eventHandler;
-// export const main = () =>
-//   middy(eventHandler)
-//     .use(kafkaRegistryFactoryMiddleware())
-//     .use(kafkaEventDecodeMiddleware()); // create kafka schema registry
+export const main = middy(eventHandler)
+  .use(kafkaRegistryFactoryMiddleware())
+  .use(kafkaEventDecodeMiddleware()); // create kafka schema registry
