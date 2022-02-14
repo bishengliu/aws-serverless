@@ -2,6 +2,8 @@ import { SchemaRegistryFactory } from "@libs/kafka-utils";
 import { KafkaEvent } from "@libs/types/kafka.types";
 import { KafkaConsumerContext } from "@libs/middlewares";
 import middy from "@middy/core";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logger = require("@dazn/lambda-powertools-logger");
 
 const defaults = {};
 
@@ -15,6 +17,8 @@ const kafkaRegistryFactoryMiddleware = (
   ) => {
     const factory = new SchemaRegistryFactory();
     handler.context.schemaRegistry = await factory.create();
+
+    logger.debug("schemaRegistry created");
   };
 
   return {

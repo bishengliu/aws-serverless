@@ -1,5 +1,7 @@
 import { DecodedKafkaField, KafkaRecord } from "../types/kafka.types";
 import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logger = require("@dazn/lambda-powertools-logger");
 
 export const decodeKafkaRecords = async (
   records: KafkaRecord[],
@@ -8,7 +10,7 @@ export const decodeKafkaRecords = async (
   const decodedRecords: KafkaRecord[] = [];
 
   for (const record of records) {
-    console.info("start to decode record:", record);
+    logger.debug("start to decode record:", record);
     const { key: base64EncodedKey, value: base64EncodedMessage } = record;
 
     try {
@@ -29,9 +31,9 @@ export const decodeKafkaRecords = async (
 
       decodedRecords.push(decodedRecord);
 
-      console.info("record decoded:", decodedRecord);
+      logger.debug("record decoded:", decodedRecord);
     } catch (error) {
-      console.warn("Fail to decode kafka record", error); // todo:need to decide what to log/do
+      logger.warn("Fail to decode kafka record", error); // todo:need to decide what to log/do
       continue;
     }
   }
