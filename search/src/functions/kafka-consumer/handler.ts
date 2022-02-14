@@ -6,13 +6,16 @@ import {
   KafkaConsumerContext,
 } from "@libs/middlewares";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logger = require("@dazn/lambda-powertools-logger");
+
 const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
 ) => {
   const recordGroups = Object.entries(event.records);
   for (const [key, groupRecords] of recordGroups) {
-    console.log(key + ": " + groupRecords.length);
+    logger.debug(key, groupRecords);
   }
 };
 
