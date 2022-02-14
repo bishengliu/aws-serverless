@@ -12,4 +12,4 @@ kafkaEvents:
       
       saslPlainAuth: "arn:aws:secretsmanager:eu-west-1:250098771573:secret:/manual/yeti/kafka/confluent-dev-GRHIgz" # "${self:custom.kafka.credentials.consumer}"
     bootstrapServers: "pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092" # "${self:custom.kafka.bootstrapServers}"
-    topic: abcam.event.target.biochemical.sit
+    topic: abcam.event.target.target.sit

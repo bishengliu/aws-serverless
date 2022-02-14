@@ -12,7 +12,7 @@ const event = {
       "pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092",
       // "${file(deploy/serverless/config/${self:custom.stage}.yml):kafkaEvents.biochemical.bootstrapServers}",
     ],
-    topic: "abcam.event.target.biochemical.sit",
+    topic: "abcam.event.target.target.sit",
     //"${file(deploy/serverless/config/${self:custom.stage}.yml):kafkaEvents.biochemical.topic}",
   },
 };

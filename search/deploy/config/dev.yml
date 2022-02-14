@@ -11,4 +11,4 @@ kafkaEvents:
     accessConfigurations: 
       saslPlainAuth: ${self:custom.kafka.credentials.consumer}
     bootstrapServers: ${self:custom.kafka.bootstrapServers}
-    topic: abcam.event.target.biochemical.sit
+    topic: abcam.event.target.target.sit
