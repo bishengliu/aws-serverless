@@ -2,7 +2,7 @@ import type { AWS } from "@serverless/typescript";
 import { kafkaConsumer } from "@functions/kafka-consumer";
 
 const serverlessConfiguration: AWS = {
-  service: "search",
+  service: "search-ephemeral",
   variablesResolutionMode: "20210326",
   frameworkVersion: "3",
   plugins: [
