@@ -1,5 +1,6 @@
 import { DecodedKafkaField, KafkaRecord } from "../types/kafka.types";
-import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
+import SchemaRegistry from "@libs/confluent-schema-registry/src/lib/SchemaRegistry";
+// import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logger = require("@dazn/lambda-powertools-logger");
 

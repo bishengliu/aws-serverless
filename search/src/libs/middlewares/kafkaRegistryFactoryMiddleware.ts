@@ -20,7 +20,7 @@ const kafkaRegistryFactoryMiddleware = (
     const factory = new SchemaRegistryFactory();
     handler.context.schemaRegistry = await factory.create();
 
-    logger.debug("schemaRegistry", handler.context.schemaRegistry);
+    // logger.debug("schemaRegistry", handler.context.schemaRegistry);
   };
 
   return {
