@@ -15,6 +15,8 @@ const kafkaRegistryFactoryMiddleware = (
   const kafkaRegistryFactoryMiddlewareBefore = async (
     handler: middy.HandlerLambda<KafkaEvent, void, KafkaConsumerContext>
   ) => {
+    logger.debug("raw event:", handler.event);
+
     const factory = new SchemaRegistryFactory();
     handler.context.schemaRegistry = await factory.create();
 
