@@ -1,5 +1,7 @@
-import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
+// import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
+
 import { fetchCredentials } from "@libs/aws-utils";
+import SchemaRegistry from "@libs/confluent-schema-registry/src/lib/SchemaRegistry";
 
 class SchemaRegistryFactory {
   private static instance: SchemaRegistry | undefined;

@@ -13,7 +13,7 @@ const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
 ) => {
-  // logger.info("decoded events:", event);
+  logger.info("decoded events:", event);
   // const recordGroups = Object.entries(event.records);
   // for (const [key, groupRecords] of recordGroups) {
   //   logger.debug(key, groupRecords);
