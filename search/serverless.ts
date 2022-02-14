@@ -75,6 +75,11 @@ const serverlessConfiguration: AWS = {
               "logs:PutLogEvents",
             ],
           },
+          {
+            Effect: "Allow",
+            Resource: "*",
+            Action: "sns:Publish",
+          },
         ],
       },
     },
@@ -125,6 +130,21 @@ const serverlessConfiguration: AWS = {
           },
           Tags: [{ Key: "Name", Value: "egress-sg" }],
         },
+      },
+      BioChemicalSNSTopic: {
+        Type: "AWS::SNS::Topic",
+        Properties: {
+          ContentBasedDeduplication: true,
+          DisplayName: "BioChemicalSNSTopic",
+          FifoTopic: true,
+          Tags: [{ Key: "Name", Value: "biochemical" }],
+          TopicName: "biochemical.fifo",
+        },
+      },
+    },
+    Outputs: {
+      BioChemicalSNSTopicArn: {
+        "Fn::GetAtt": ["BioChemicalSNSTopic", "Arn"],
       },
     },
   },
