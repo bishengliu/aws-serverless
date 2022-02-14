@@ -78,7 +78,12 @@ const serverlessConfiguration: AWS = {
           {
             Effect: "Allow",
             Resource: "*",
-            Action: "sns:Publish",
+            Action: [
+              "SNS:Publish",
+              "SNS:GetTopicAttributes",
+              "SNS:Subscribe",
+              "SNS:ListSubscriptionsByTopic",
+            ],
           },
         ],
       },
@@ -144,7 +149,9 @@ const serverlessConfiguration: AWS = {
     },
     Outputs: {
       BioChemicalSNSTopicArn: {
-        "Fn::GetAtt": ["BioChemicalSNSTopic", "Arn"],
+        Value: {
+          "Fn::GetAtt": ["BioChemicalSNSTopic", "TopicName"],
+        },
       },
     },
   },
