@@ -13,12 +13,11 @@ const eventHandler = async (
   event: KafkaEvent,
   context: KafkaConsumerContext
 ) => {
-  logger.info("raw event from handler itself:", event);
-
-  const recordGroups = Object.entries(event.records);
-  for (const [key, groupRecords] of recordGroups) {
-    logger.debug(key, groupRecords);
-  }
+  // logger.info("decoded events:", event);
+  // const recordGroups = Object.entries(event.records);
+  // for (const [key, groupRecords] of recordGroups) {
+  //   logger.debug(key, groupRecords);
+  // }
 };
 
 export const main = middy(eventHandler)
