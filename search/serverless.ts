@@ -75,6 +75,16 @@ const serverlessConfiguration: AWS = {
               "logs:PutLogEvents",
             ],
           },
+          {
+            Effect: "Allow",
+            Resource: "*",
+            Action: [
+              "SNS:Publish",
+              "SNS:GetTopicAttributes",
+              "SNS:Subscribe",
+              "SNS:ListSubscriptionsByTopic",
+            ],
+          },
         ],
       },
     },
@@ -124,6 +134,23 @@ const serverlessConfiguration: AWS = {
             CidrIp: "0.0.0.0/0",
           },
           Tags: [{ Key: "Name", Value: "egress-sg" }],
+        },
+      },
+      BioChemicalSNSTopic: {
+        Type: "AWS::SNS::Topic",
+        Properties: {
+          ContentBasedDeduplication: true,
+          DisplayName: "BioChemicalSNSTopic",
+          FifoTopic: true,
+          Tags: [{ Key: "Name", Value: "biochemical" }],
+          TopicName: "biochemical.fifo",
+        },
+      },
+    },
+    Outputs: {
+      BioChemicalSNSTopicArn: {
+        Value: {
+          "Fn::GetAtt": ["BioChemicalSNSTopic", "TopicName"],
         },
       },
     },
