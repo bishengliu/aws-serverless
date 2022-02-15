@@ -1,10 +1,11 @@
 import fetchCredentials from "./secreteManager";
-import SNSPublisher from "./snsPublisher";
+import { publishMessage, publishBatchMessages } from "./snsPublisher";
 import { SNSMessageEntry, SNSMessage, SNSBatchMessages } from "./types";
 
 export {
   fetchCredentials,
-  SNSPublisher,
+  publishMessage,
+  publishBatchMessages,
   SNSMessageEntry,
   SNSMessage,
   SNSBatchMessages,

@@ -27,8 +27,7 @@ class SchemaRegistryFactory {
     }
 
     const { host, username, password } = await fetchCredentials(
-      process.env.SCHEMA_REGISTRY_CREDENTIALS_ARN,
-      process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION
+      process.env.SCHEMA_REGISTRY_CREDENTIALS_ARN
     );
 
     SchemaRegistryFactory.instance = new SchemaRegistry({

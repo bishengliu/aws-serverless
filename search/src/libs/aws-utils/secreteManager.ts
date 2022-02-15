@@ -26,11 +26,12 @@ class SecretsManager {
   }
 }
 
-const fetchCredentials = async (secretNameOrArn: string, region: string) => {
+const secretsManagerClient = new SecretsManager().CreateClient();
+
+const fetchCredentials = async (secretNameOrArn: string) => {
   const command = new GetSecretValueCommand({
     SecretId: secretNameOrArn,
   } as GetSecretValueCommandInput);
-  const secretsManagerClient = new SecretsManager().CreateClient();
   const response = await secretsManagerClient.send(command);
   return response?.SecretString ? JSON.parse(response?.SecretString) : "";
 };

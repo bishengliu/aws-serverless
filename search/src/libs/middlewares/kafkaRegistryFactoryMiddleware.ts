@@ -6,6 +6,7 @@ import middy from "@middy/core";
 const logger = require("@dazn/lambda-powertools-logger");
 
 const defaults = {};
+const factory = new SchemaRegistryFactory();
 
 const kafkaRegistryFactoryMiddleware = (
   opts: Record<string, unknown> = {}
@@ -17,7 +18,6 @@ const kafkaRegistryFactoryMiddleware = (
   ) => {
     // logger.debug("raw event:", handler.event);
 
-    const factory = new SchemaRegistryFactory();
     handler.context.schemaRegistry = await factory.create();
 
     // logger.debug("schemaRegistry", handler.context.schemaRegistry);
