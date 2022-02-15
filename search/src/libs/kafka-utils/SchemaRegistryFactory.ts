@@ -25,6 +25,7 @@ class SchemaRegistryFactory {
         "SCHEMA_REGISTRY_CREDENTIALS_ARN or AWS_REGION is not set!"
       );
     }
+
     const { host, username, password } = await fetchCredentials(
       process.env.SCHEMA_REGISTRY_CREDENTIALS_ARN,
       process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION
