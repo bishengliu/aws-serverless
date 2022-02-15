@@ -136,14 +136,14 @@ const serverlessConfiguration: AWS = {
           Tags: [{ Key: "Name", Value: "egress-sg" }],
         },
       },
-      BioChemicalSNSTopic: {
+      TargetSNSTopic: {
         Type: "AWS::SNS::Topic",
         Properties: {
           ContentBasedDeduplication: true,
           DisplayName: "BioChemicalSNSTopic",
           FifoTopic: true,
           Tags: [{ Key: "Name", Value: "biochemical" }],
-          TopicName: "biochemical.fifo",
+          TopicName: "target.fifo",
         },
       },
     },

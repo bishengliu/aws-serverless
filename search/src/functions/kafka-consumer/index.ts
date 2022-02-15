@@ -24,6 +24,7 @@ export const kafkaConsumer = {
     SNS_TOPIC_ARN: {
       Ref: "BioChemicalSNSTopic",
     },
+    MESSAGE_GROUP_ID: "biochemical",
     SCHEMA_REGISTRY_CREDENTIALS_ARN:
       "${file(deploy/config/${self:custom.stage}.yml):custom.schemaRegistry.credentials}",
   },

@@ -1,11 +1,13 @@
-export interface SNSMessage {
+export interface SNSMessageEntry {
   MessageGroupId: string;
   MessageDeduplicationId: string;
   Message: string;
+}
+export interface SNSMessage extends SNSMessageEntry {
   TopicArn: string;
 }
 
-export interface SNSMessages {
+export interface SNSBatchMessages {
   TopicArn: string;
-  PublishBatchRequestEntries: SNSMessage[];
+  Messages: SNSMessageEntry[];
 }
