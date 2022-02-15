@@ -1,9 +1,11 @@
 export interface SNSMessageEntry {
+  Id: string;
   MessageGroupId: string;
   MessageDeduplicationId: string;
   Message: string;
 }
-export interface SNSMessage extends SNSMessageEntry {
+
+export interface SNSMessage extends Omit<SNSMessageEntry, "Id"> {
   TopicArn: string;
 }
 

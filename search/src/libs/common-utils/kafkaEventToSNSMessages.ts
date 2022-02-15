@@ -11,6 +11,7 @@ const kafkaEventToSNSMessages = (event: KafkaEvent) => {
   for (const [_, groupRecords] of recordGroups) {
     for (const record of groupRecords) {
       messages.push({
+        Id: record.offset + "-" + record.timestamp,
         MessageGroupId,
         MessageDeduplicationId:
           record.topic + "-" + record.partition + "-" + record.offset,

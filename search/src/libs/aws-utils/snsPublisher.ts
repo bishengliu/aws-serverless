@@ -45,7 +45,7 @@ const publishMessage = async (
 
     return await snsPublisher.send(command);
   } catch (err) {
-    logger.warn(`"fail to publish message to SNS"`, message, err);
+    logger.warn(`"fail to publish message to SNS"`, err);
   }
 };
 
@@ -63,7 +63,7 @@ const publishBatchMessages = async (
 
     return await snsPublisher.send(command);
   } catch (error) {
-    logger.warn(`"fail to publish messages to SNS"`, messages, error);
+    logger.warn(`"fail to publish messages to SNS"`, error);
   }
 };
 

@@ -11,10 +11,10 @@ import { kafkaEventToSNSMessages } from "@libs/common-utils";
 const logger = require("@dazn/lambda-powertools-logger");
 
 const eventHandler = async (event: KafkaEvent) => {
-  logger.info("decoded events:", event);
+  // logger.info("decoded events:", event);
 
   await publishBatchMessages(kafkaEventToSNSMessages(event));
-  logger.info("events published to SNS");
+  // logger.info("events published to SNS");
 };
 
 export const main = middy(eventHandler)
