@@ -22,7 +22,7 @@ export const kafkaConsumer = {
   timeout: 300,
   environment: {
     SNS_TOPIC_ARN: {
-      Ref: "BioChemicalSNSTopic",
+      Ref: "TargetSNSTopic",
     },
     MESSAGE_GROUP_ID: "biochemical",
     SCHEMA_REGISTRY_CREDENTIALS_ARN:

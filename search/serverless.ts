@@ -140,17 +140,17 @@ const serverlessConfiguration: AWS = {
         Type: "AWS::SNS::Topic",
         Properties: {
           ContentBasedDeduplication: true,
-          DisplayName: "BioChemicalSNSTopic",
+          DisplayName: "TargetSNSTopic",
           FifoTopic: true,
-          Tags: [{ Key: "Name", Value: "biochemical" }],
+          Tags: [{ Key: "Name", Value: "target" }],
           TopicName: "target.fifo",
         },
       },
     },
     Outputs: {
-      BioChemicalSNSTopicArn: {
+      TargetSNSTopicArn: {
         Value: {
-          "Fn::GetAtt": ["BioChemicalSNSTopic", "TopicName"],
+          "Fn::GetAtt": ["TargetSNSTopic", "TopicName"],
         },
       },
     },
