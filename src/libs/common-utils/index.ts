@@ -1,3 +1,6 @@
-import kafkaEventToSNSMessages from "./kafkaEventToSNSMessages";
+import {
+  kafkaEventToSNSBatchMessages,
+  kafkaEventToSNSMessages,
+} from "./kafkaEventToSNSMessages";
 
-export { kafkaEventToSNSMessages };
+export { kafkaEventToSNSMessages, kafkaEventToSNSBatchMessages };
