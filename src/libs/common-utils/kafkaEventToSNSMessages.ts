@@ -31,7 +31,6 @@ const kafkaEventToSNSBatchMessages = (
       TopicArn,
       Messages: messages.splice(0, 10),
     } as SNSBatchMessages);
-    console.log(batches.length, messages.length);
   }
 
   if (messages.length > 0) {
@@ -40,7 +39,6 @@ const kafkaEventToSNSBatchMessages = (
       Messages: messages.splice(0),
     });
   }
-  console.log(batches.length, messages.length);
 
   return batches;
 };
