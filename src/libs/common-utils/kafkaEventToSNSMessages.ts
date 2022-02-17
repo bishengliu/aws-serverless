@@ -25,19 +25,22 @@ const kafkaEventToSNSBatchMessages = (
   const batches: SNSBatchMessages[] = [];
 
   // SNS only allows send batch requests with 10 message each time
-  for (let i = 0; i < messages.length; i = i + 9) {
+
+  while (messages.length >= 10) {
     batches.push({
       TopicArn,
-      Messages: messages.splice(i, 10),
+      Messages: messages.splice(0, 10),
     } as SNSBatchMessages);
+    console.log(batches.length, messages.length);
   }
 
   if (messages.length > 0) {
     batches.push({
       TopicArn,
-      Messages: messages,
-    } as SNSBatchMessages);
+      Messages: messages.splice(0),
+    });
   }
+  console.log(batches.length, messages.length);
 
   return batches;
 };
