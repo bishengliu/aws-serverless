@@ -4,25 +4,23 @@ import {
   kafkaRegistryFactoryMiddleware,
   kafkaEventDecodeMiddleware,
 } from "@libs/middlewares";
-import { publishBatchMessages, publishMessage } from "@libs/aws-utils";
-import {
-  kafkaEventToSNSBatchMessages,
-  kafkaEventToSNSMessages,
-} from "@libs/common-utils";
+import { publishBatchMessages } from "@libs/aws-utils";
+import { kafkaEventToSNSBatchMessages } from "@libs/common-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logger = require("@dazn/lambda-powertools-logger");
 
 const eventHandler = async (event: KafkaEvent) => {
-  const messages = kafkaEventToSNSMessages(event);
-  messages.forEach(async (message) => {
-    await publishMessage(message);
-    logger.info("events published to SNS");
-  });
-  // logger.info("decoded events:", event);
-  // const snsBatchMessages = kafkaEventToSNSMessages(event);
-  // logger.info(snsBatchMessages);
-  // await publishBatchMessages(snsBatchMessages);
+  const snsBatchMessages = kafkaEventToSNSBatchMessages(event);
+
+  for (var messages of snsBatchMessages) {
+    try {
+      await publishBatchMessages(messages);
+      logger.info("batch messages published to SNS");
+    } catch (error) {
+      logger.warn("fail to publish SNS messages", messages);
+    }
+  }
 };
 
 export const main = middy(eventHandler)

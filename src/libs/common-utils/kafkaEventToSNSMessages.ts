@@ -1,7 +1,9 @@
 import { KafkaEvent } from "@libs/types/kafka.types";
 import { SNSBatchMessages, SNSMessageEntry, SNSMessage } from "@libs/aws-utils";
 
-const kafkaEventToSNSBatchMessages = (event: KafkaEvent) => {
+const kafkaEventToSNSBatchMessages = (
+  event: KafkaEvent
+): SNSBatchMessages[] => {
   const MessageGroupId = process.env.MESSAGE_GROUP_ID;
   const TopicArn = process.env.SNS_TOPIC_ARN;
 
@@ -19,15 +21,28 @@ const kafkaEventToSNSBatchMessages = (event: KafkaEvent) => {
       } as SNSMessageEntry);
     }
   }
-  const batchMessages: SNSBatchMessages = {
-    TopicArn: TopicArn,
-    Messages: messages,
-  };
 
-  return batchMessages;
+  const batches: SNSBatchMessages[] = [];
+
+  // SNS only allows send batch requests with 10 message each time
+  for (let i = 0; i < messages.length; i = i + 9) {
+    batches.push({
+      TopicArn,
+      Messages: messages.splice(i, 10),
+    } as SNSBatchMessages);
+  }
+
+  if (messages.length > 0) {
+    batches.push({
+      TopicArn,
+      Messages: messages,
+    } as SNSBatchMessages);
+  }
+
+  return batches;
 };
 
-const kafkaEventToSNSMessages = (event: KafkaEvent) => {
+const kafkaEventToSNSMessages = (event: KafkaEvent): SNSMessage[] => {
   const MessageGroupId = process.env.MESSAGE_GROUP_ID;
   const TopicArn = process.env.SNS_TOPIC_ARN;
 

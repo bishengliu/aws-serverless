@@ -52,19 +52,15 @@ const publishMessage = async (
 const publishBatchMessages = async (
   messages: SNSBatchMessages
 ): Promise<PublishBatchCommandOutput> => {
-  try {
-    const input = {
-      TopicArn: messages.TopicArn,
-      PublishBatchRequestEntries:
-        messages.Messages as unknown as PublishBatchRequestEntry[],
-    } as PublishBatchCommandInput;
+  const input = {
+    TopicArn: messages.TopicArn,
+    PublishBatchRequestEntries:
+      messages.Messages as unknown as PublishBatchRequestEntry[],
+  } as PublishBatchCommandInput;
 
-    const command = new PublishBatchCommand(input);
+  const command = new PublishBatchCommand(input);
 
-    return await snsPublisher.send(command);
-  } catch (error) {
-    logger.warn(`"fail to publish messages to SNS"`, error);
-  }
+  return await snsPublisher.send(command);
 };
 
 export { publishMessage, publishBatchMessages };
