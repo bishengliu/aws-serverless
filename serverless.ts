@@ -146,11 +146,110 @@ const serverlessConfiguration: AWS = {
           TopicName: "target.fifo",
         },
       },
+      BioChemicalFifoSQS: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          QueueName: "biochemical.fifo",
+          FifoQueue: true,
+          Tags: [{ Key: "Name", Value: "biochemical" }],
+        },
+      },
+      SQSQueuePolicy: {
+        Type: "AWS::SQS::QueuePolicy",
+        Properties: {
+          Queues: [{ Ref: "BioChemicalFifoSQS" }],
+          Statement: {
+            Effect: "Allow",
+            Principal: "*",
+            Action: ["sqs:SendMessage"],
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": { Ref: "TargetSNSTopic" },
+              },
+            },
+          },
+          Tags: [{ Key: "Name", Value: "biochemical-policy" }],
+        },
+      },
+      BioChemicalDLQ: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          VisibilityTimeout: 160,
+          Tags: [{ Key: "Name", Value: "biochemical-dlq" }],
+        },
+      },
+      BioChemicalSNSSubscription: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          TopicArn: {
+            Ref: "TargetSNSTopic",
+          },
+          Endpoint: { Ref: "BioChemicalFifoSQS" },
+          Protocol: "sqs",
+          RawMessageDelivery: true,
+        },
+      },
+      BioChemicalSQSCloudWatchAlarm: {
+        Type: "AWS::CloudWatch::Alarm",
+        Properties: {
+          AlarmName: "BioChemicalSQS_AgeOfOldestMessage",
+          AlarmDescription:
+            "Alarms if the biochemocal SQS Queue has messages in it for too long",
+          ComparisonOperator: "GreaterThanThreshold",
+          Dimensions: [
+            {
+              Name: "QueueName",
+              Value: {
+                "Fn::GetAtt": ["BioChemicalFifoSQS", "QueueName"],
+              },
+            },
+          ],
+          DatapointsToAlarm: 2,
+          EvaluationPeriods: 3,
+          MetricName: "ApproximateAgeOfOldestMessage",
+          Namespace: "AWS/SQS",
+          Period: 300,
+          Statistic: "Maximum",
+          Threshold: 30,
+          TreatMissingData: "notBreaching",
+          Unit: "Seconds",
+        },
+      },
+      BioChemicalDLQApproximateNumberOfMessagesVisible: {
+        Type: "AWS::CloudWatch::Alarm",
+        Properties: {
+          AlarmName: "BioChemicalDLQ_ApproximateNumberOfMessagesVisible",
+          AlarmDescription:
+            "Alarms if the biochemocal DLQ has too many messages",
+          ComparisonOperator: "GreaterThanThreshold",
+          Dimensions: [
+            {
+              Name: "QueueName",
+              Value: {
+                "Fn::GetAtt": ["BioChemicalDLQ", "QueueName"],
+              },
+            },
+          ],
+          DatapointsToAlarm: 2,
+          EvaluationPeriods: 3,
+          MetricName: "ApproximateNumberOfMessagesVisible",
+          Namespace: "AWS/SQS",
+          Period: 300,
+          Statistic: "Maximum",
+          Threshold: 1,
+          TreatMissingData: "notBreaching",
+        },
+      },
     },
     Outputs: {
       TargetSNSTopicArn: {
         Value: {
           "Fn::GetAtt": ["TargetSNSTopic", "TopicName"],
+        },
+      },
+      BioChemicalSQSArn: {
+        value: {
+          "Fn::GetAtt": ["BioChemicalDLQ", "QueueName"],
         },
       },
     },
