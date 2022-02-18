@@ -1,4 +1,5 @@
 import { handlerPath } from "@libs/lambda-utils";
+import rConstants from "serverless/constants";
 
 const event = {
   kafka: {
@@ -22,7 +23,7 @@ export const kafkaConsumer = {
   timeout: 300,
   environment: {
     SNS_TOPIC_ARN: {
-      Ref: "TargetSNSTopic",
+      Ref: rConstants.SNSFifoTopicResource,
     },
     MESSAGE_GROUP_ID: "biochemical",
     SCHEMA_REGISTRY_CREDENTIALS_ARN:
