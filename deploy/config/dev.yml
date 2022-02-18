@@ -1,14 +1,14 @@
 custom:
   kafka:
-    bootstrapServers: pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092
+    bootstrapServers: my-kafka-bootstrapServer
     credentials:
-      consumer: arn:aws:secretsmanager:eu-west-1:250098771573:secret:/manual/yeti/kafka/confluent-dev-GRHIgz
+      consumer: my-consumer-credentials
   schemaRegistry:
-    credentials: arn:aws:secretsmanager:eu-west-1:250098771573:secret:/manual/yeti/schema-registry/confluent-dev-59slRC
+    credentials: my-schemaRegistry-credentials
 
 kafkaEvents:
   biochemical:
     accessConfigurations:   
-      saslPlainAuth: arn:aws:secretsmanager:eu-west-1:250098771573:secret:/manual/yeti/kafka/confluent-dev-GRHIgz
-    bootstrapServers: pkc-e8mp5.eu-west-1.aws.confluent.cloud:9092 
-    topic: abcam.event.target.biochemical.sit
+      saslPlainAuth: my-accessConfigurations-saslPlainAuth
+    bootstrapServers: my-kafka-bootstrapServer
+    topic: my-kafka-topic
