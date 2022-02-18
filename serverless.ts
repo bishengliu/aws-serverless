@@ -1,5 +1,6 @@
 import type { AWS } from "@serverless/typescript";
 import { kafkaConsumer } from "@functions/kafka-consumer";
+import { resources } from "./serverless/resources";
 
 const serverlessConfiguration: AWS = {
   service: "search-ephemeral",
@@ -121,39 +122,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    Resources: {
-      LambdaSecurityGroup: {
-        Type: "AWS::EC2::SecurityGroup",
-        Properties: {
-          GroupDescription: "Allow open egress to anywhere",
-          VpcId: "${self:custom.vpc.id}",
-          SecurityGroupEgress: {
-            IpProtocol: -1,
-            FromPort: 0,
-            ToPort: 0,
-            CidrIp: "0.0.0.0/0",
-          },
-          Tags: [{ Key: "Name", Value: "egress-sg" }],
-        },
-      },
-      TargetSNSTopic: {
-        Type: "AWS::SNS::Topic",
-        Properties: {
-          ContentBasedDeduplication: true,
-          DisplayName: "TargetSNSTopic",
-          FifoTopic: true,
-          Tags: [{ Key: "Name", Value: "target" }],
-          TopicName: "target.fifo",
-        },
-      },
-    },
-    Outputs: {
-      TargetSNSTopicArn: {
-        Value: {
-          "Fn::GetAtt": ["TargetSNSTopic", "TopicName"],
-        },
-      },
-    },
+    ...resources,
   },
 };
 
