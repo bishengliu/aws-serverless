@@ -1,6 +1,8 @@
 import type { AWS } from "@serverless/typescript";
-import { kafkaConsumer } from "@functions/kafka-consumer";
+import { kafkaConsumerFactory } from "@functions/kafka-consumer";
 import { resources } from "./serverless/resources";
+
+const kafkaConsumer = kafkaConsumerFactory("biochemical");
 
 const serverlessConfiguration: AWS = {
   service: "search-ephemeral",

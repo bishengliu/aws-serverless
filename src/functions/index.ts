@@ -1,1 +1,1 @@
-export { kafkaConsumer } from "./kafka-consumer";
+export { kafkaConsumerFactory } from "./kafka-consumer";
