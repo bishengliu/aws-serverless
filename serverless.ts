@@ -151,6 +151,11 @@ const serverlessConfiguration: AWS = {
         Properties: {
           QueueName: "biochemical.fifo",
           FifoQueue: true,
+          VisibilityTimeout: 180,
+          RedrivePolicy: {
+            deadLetterTargetArn: { "Fn::GetAtt": ["BioChemicalDLQ", "Arn"] },
+            maxReceiveCount: 3,
+          },
           Tags: [{ Key: "Name", Value: "biochemical" }],
         },
       },
@@ -158,22 +163,26 @@ const serverlessConfiguration: AWS = {
         Type: "AWS::SQS::QueuePolicy",
         Properties: {
           Queues: [{ Ref: "BioChemicalFifoSQS" }],
-          Statement: {
-            Effect: "Allow",
-            Principal: "*",
-            Action: ["sqs:SendMessage"],
-            Condition: {
-              ArnEquals: {
-                "aws:SourceArn": { Ref: "TargetSNSTopic" },
+          PolicyDocument: {
+            Id: "AllowIncomingAccess",
+            Statement: {
+              Effect: "Allow",
+              Principal: "*",
+              Action: ["sqs:SendMessage"],
+              Condition: {
+                ArnEquals: {
+                  "aws:SourceArn": { Ref: "TargetSNSTopic" },
+                },
               },
             },
           },
-          Tags: [{ Key: "Name", Value: "biochemical-policy" }],
         },
       },
       BioChemicalDLQ: {
         Type: "AWS::SQS::Queue",
         Properties: {
+          QueueName: "biochemical-dlq.fifo",
+          FifoQueue: true,
           VisibilityTimeout: 160,
           Tags: [{ Key: "Name", Value: "biochemical-dlq" }],
         },
@@ -184,7 +193,7 @@ const serverlessConfiguration: AWS = {
           TopicArn: {
             Ref: "TargetSNSTopic",
           },
-          Endpoint: { Ref: "BioChemicalFifoSQS" },
+          Endpoint: { "Fn::GetAtt": ["BioChemicalFifoSQS", "Arn"] },
           Protocol: "sqs",
           RawMessageDelivery: true,
         },
@@ -248,7 +257,7 @@ const serverlessConfiguration: AWS = {
         },
       },
       BioChemicalSQSArn: {
-        value: {
+        Value: {
           "Fn::GetAtt": ["BioChemicalDLQ", "QueueName"],
         },
       },
