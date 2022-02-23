@@ -4,8 +4,10 @@ import { resources } from "./serverless/resources";
 import { sqsConsumerFactory } from "@functions/sqs-consumer";
 import { ResourcePrefix } from "serverless/constants";
 
-const kafkaConsumer = kafkaConsumerFactory("biochemical");
-const sqsConsumer = sqsConsumerFactory(ResourcePrefix.BIOCHEMICAL);
+const kafkaBiochemicalConsumer = kafkaConsumerFactory(
+  ResourcePrefix.BIOCHEMICAL
+);
+const sqsBiochemicalConsumer = sqsConsumerFactory(ResourcePrefix.BIOCHEMICAL);
 
 const serverlessConfiguration: AWS = {
   service: "search-ephemeral",
@@ -96,7 +98,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { kafkaConsumer, sqsConsumer },
+  functions: { kafkaBiochemicalConsumer, sqsBiochemicalConsumer },
   package: { individually: true },
   custom: {
     stage: "${opt:stage, 'poc'}",
