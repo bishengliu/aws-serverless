@@ -15,10 +15,10 @@ const eventHandler = async (event: KafkaEvent) => {
 
   for (var messages of snsBatchMessages) {
     try {
-      await publishBatchMessages(messages);
-      logger.info("batch messages published to SNS");
+      const res = await publishBatchMessages(messages);
+      logger.info("batch messages published to SNS", res);
     } catch (error) {
-      logger.warn("fail to publish SNS messages", messages);
+      logger.warn("fail to publish SNS messages", error, messages);
     }
   }
 };

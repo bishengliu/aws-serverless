@@ -74,6 +74,8 @@ const serverlessConfiguration: AWS = {
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents",
+              "logs:PutMetricFilter",
+              "logs:PutRetentionPolicy",
             ],
           },
           {
@@ -84,6 +86,9 @@ const serverlessConfiguration: AWS = {
               "SNS:GetTopicAttributes",
               "SNS:Subscribe",
               "SNS:ListSubscriptionsByTopic",
+              "SQS:SendMessage",
+              "SQS:ReceiveMessage",
+              "SQS:DeleteMessage",
             ],
           },
         ],

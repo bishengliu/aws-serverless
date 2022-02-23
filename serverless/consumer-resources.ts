@@ -1,15 +1,25 @@
 import { ResourcePrefix } from "./constants";
-export const consumerResources = (
-  resource_prefix: ResourcePrefix,
-  SNSTopicResource: string
-) => {
+export const consumerResources = (resource_prefix: ResourcePrefix) => {
   const resources = {};
+  //sns topic
+  resources[resource_prefix + "SNSTopic"] = {
+    Type: "AWS::SNS::Topic",
+    Properties: {
+      ContentBasedDeduplication: true,
+      DisplayName: `${resource_prefix.toLowerCase()}-topic.fifo`,
+      FifoTopic: true,
+      Tags: [
+        { Key: "Name", Value: `${resource_prefix.toLowerCase()}-topic.fifo` },
+      ],
+      TopicName: `${resource_prefix.toLowerCase()}-topic.fifo`,
+    },
+  };
 
   // fifo sqs
   resources[resource_prefix + "FifoSQS"] = {
     Type: "AWS::SQS::Queue",
     Properties: {
-      QueueName: `${resource_prefix.toLowerCase()}.fifo`,
+      QueueName: `${resource_prefix.toLowerCase()}-sqs.fifo`,
       FifoQueue: true,
       VisibilityTimeout: 180,
       RedrivePolicy: {
@@ -31,9 +41,10 @@ export const consumerResources = (
           Effect: "Allow",
           Principal: "*",
           Action: ["sqs:SendMessage"],
+          Resource: { Ref: resource_prefix + "FifoSQS" },
           Condition: {
             ArnEquals: {
-              "aws:SourceArn": { Ref: SNSTopicResource },
+              "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
             },
           },
         },
@@ -57,11 +68,14 @@ export const consumerResources = (
     Type: "AWS::SNS::Subscription",
     Properties: {
       TopicArn: {
-        Ref: SNSTopicResource,
+        Ref: resource_prefix + "SNSTopic",
       },
       Endpoint: { "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"] },
       Protocol: "sqs",
       RawMessageDelivery: true,
+      RedrivePolicy: {
+        deadLetterTargetArn: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+      },
     },
   };
 
@@ -120,6 +134,15 @@ export const consumerResources = (
 
   // outputs
   const outputs = {};
+
+  //sns topic
+  outputs[resource_prefix + "SNSTopicArn"] = {
+    Value: {
+      "Fn::GetAtt": [resource_prefix + "SNSTopic", "TopicName"],
+    },
+  };
+
+  // q
   outputs[resource_prefix + "FifoSQSArn"] = {
     Value: {
       "Fn::GetAtt": [resource_prefix + "FifoSQS", "QueueName"],

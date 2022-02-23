@@ -3,7 +3,6 @@ import {
   KafkaEventKey,
 } from "@functions/kafka-consumer-events";
 import { handlerPath } from "@libs/lambda-utils";
-import rConstants from "serverless/constants";
 import { ResourcePrefix } from "serverless/constants";
 
 export const kafkaConsumerFactory = (resource_prefix: ResourcePrefix) => {
@@ -14,7 +13,7 @@ export const kafkaConsumerFactory = (resource_prefix: ResourcePrefix) => {
     events: [kafkaConsumerEvent(KafkaEventKey.BIOCHEMICAL)],
     environment: {
       SNS_TOPIC_ARN: {
-        Ref: rConstants.SNSFifoTopicResource,
+        Ref: resource_prefix + "SNSTopic",
       },
       MESSAGE_GROUP_ID: resource_prefix,
       SCHEMA_REGISTRY_CREDENTIALS_ARN:

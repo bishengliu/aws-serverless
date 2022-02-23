@@ -1,17 +1,7 @@
-import { snsFifoResource } from "./sns-resource";
 import { consumerResources } from "./consumer-resources";
-import rConstants from "./constants";
 import { ResourcePrefix } from "./constants";
 
-const biochemicalResources = consumerResources(
-  ResourcePrefix.BIOCHEMICAL,
-  rConstants.SNSFifoTopicResource
-);
-
-const snsResource = snsFifoResource(
-  rConstants.SNSFifoTopicResource,
-  rConstants.SNSFifoTopicName
-);
+const biochemicalStack = consumerResources(ResourcePrefix.BIOCHEMICAL);
 
 export const resources = {
   Resources: {
@@ -29,15 +19,9 @@ export const resources = {
         Tags: [{ Key: "Name", Value: "egress-sg" }],
       },
     },
-    ...snsResource,
-    ...biochemicalResources.resources,
+    ...biochemicalStack.resources,
   },
   Outputs: {
-    TargetSNSTopicArn: {
-      Value: {
-        "Fn::GetAtt": [rConstants.SNSFifoTopicResource, "TopicName"],
-      },
-    },
-    ...biochemicalResources.outputs,
+    ...biochemicalStack.outputs,
   },
 };
