@@ -1,13 +1,6 @@
 import type { AWS } from "@serverless/typescript";
-import { kafkaConsumerFactory } from "@functions/kafka-consumer";
 import { resources } from "./serverless/resources";
-import { sqsConsumerFactory } from "@functions/sqs-consumer";
-import { ResourcePrefix } from "serverless/constants";
-
-const kafkaBiochemicalConsumer = kafkaConsumerFactory(
-  ResourcePrefix.BIOCHEMICAL
-);
-const sqsBiochemicalConsumer = sqsConsumerFactory(ResourcePrefix.BIOCHEMICAL);
+import { functions } from "./serverless/functions";
 
 const serverlessConfiguration: AWS = {
   service: "search-ephemeral",
@@ -98,7 +91,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { kafkaBiochemicalConsumer, sqsBiochemicalConsumer },
+  functions: { ...functions },
   package: { individually: true },
   custom: {
     stage: "${opt:stage, 'poc'}",

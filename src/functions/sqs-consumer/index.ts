@@ -6,7 +6,7 @@ export const sqsConsumerFactory = (resource_prefix: ResourcePrefix) => {
     tags: {
       stage: `sqs-${resource_prefix}-` + "consumer-${self:custom.stage}",
     },
-    timeout: 300,
+    timeout: 150,
     handler: `${handlerPath(__dirname)}/handler.main`,
     events: [
       {
@@ -15,7 +15,7 @@ export const sqsConsumerFactory = (resource_prefix: ResourcePrefix) => {
             "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"],
           },
           batchSize: 10,
-          maximumBatchingWindow: 60,
+          enabled: true,
           functionResponseType:
             "ReportBatchItemFailures" as "ReportBatchItemFailures",
         },
