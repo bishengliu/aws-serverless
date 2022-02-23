@@ -1,5 +1,6 @@
+import { ResourcePrefix } from "./constants";
 export const consumerResources = (
-  resource_prefix: string,
+  resource_prefix: ResourcePrefix,
   SNSTopicResource: string
 ) => {
   const resources = {};
