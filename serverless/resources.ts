@@ -1,9 +1,10 @@
 import { snsFifoResource } from "./sns-resource";
 import { consumerResources } from "./consumer-resources";
 import rConstants from "./constants";
+import { ResourcePrefix } from "./constants";
 
 const biochemicalResources = consumerResources(
-  "BioChemical",
+  ResourcePrefix.BIOCHEMICAL,
   rConstants.SNSFifoTopicResource
 );
 
