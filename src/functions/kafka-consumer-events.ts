@@ -1,10 +1,8 @@
-export enum KafkaEventKey {
-  BIOCHEMICAL = "biochemical",
-}
+import { ResourcePrefix } from "serverless/constants";
 
 const events = {};
 
-events["biochemical"] = {
+events[ResourcePrefix.BIOCHEMICAL] = {
   kafka: {
     accessConfigurations: {
       saslPlainAuth: [
@@ -19,5 +17,5 @@ events["biochemical"] = {
   },
 };
 
-export const kafkaConsumerEvent = (kafkaEventKey: KafkaEventKey) =>
+export const kafkaConsumerEvent = (kafkaEventKey: ResourcePrefix) =>
   events[kafkaEventKey];
