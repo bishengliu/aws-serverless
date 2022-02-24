@@ -69,11 +69,11 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
           Principal: "*",
           Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
           Resource: { "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"] },
-          // Condition: {
-          //   ArnEquals: {
-          //     "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
-          //   },
-          // },
+          Condition: {
+            ArnEquals: {
+              "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
+            },
+          },
         },
       },
     },
@@ -92,12 +92,24 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
             Principal: "*",
             Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
             Resource: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": {
+                  "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"],
+                },
+              },
+            },
           },
           {
             Effect: "Allow",
             Principal: "*",
             Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
             Resource: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
+              },
+            },
           },
         ],
       },
