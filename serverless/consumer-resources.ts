@@ -30,28 +30,6 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
     },
   };
 
-  // sqs policy
-  resources[resource_prefix + "FifoSQSPolicy"] = {
-    Type: "AWS::SQS::QueuePolicy",
-    Properties: {
-      Queues: [{ Ref: resource_prefix + "FifoSQS" }],
-      PolicyDocument: {
-        Id: "AllowIncomingAccess",
-        Statement: {
-          Effect: "Allow",
-          Principal: "*",
-          Action: ["sqs:SendMessage"],
-          Resource: { Ref: resource_prefix + "FifoSQS" },
-          Condition: {
-            ArnEquals: {
-              "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
-            },
-          },
-        },
-      },
-    },
-  };
-
   // dlq
   resources[resource_prefix + "DLQ"] = {
     Type: "AWS::SQS::Queue",
@@ -75,6 +53,65 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
       RawMessageDelivery: true,
       RedrivePolicy: {
         deadLetterTargetArn: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+      },
+    },
+  };
+
+  // sqs policy
+  resources[resource_prefix + "FifoSQSPolicy"] = {
+    Type: "AWS::SQS::QueuePolicy",
+    Properties: {
+      Queues: [{ Ref: resource_prefix + "FifoSQS" }],
+      PolicyDocument: {
+        Id: "AllowSQSIncomingAccess",
+        Statement: {
+          Effect: "Allow",
+          Principal: "*",
+          Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
+          Resource: { "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"] },
+          Condition: {
+            ArnEquals: {
+              "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  // dlq policy
+  resources[resource_prefix + "DLQSPolicy"] = {
+    Type: "AWS::SQS::QueuePolicy",
+    Properties: {
+      Queues: [{ Ref: resource_prefix + "DLQ" }],
+      PolicyDocument: {
+        Id: "AllowDLQIncomingAccess",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
+            Resource: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": {
+                  "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"],
+                },
+              },
+            },
+          },
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
+            Resource: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
+            Condition: {
+              ArnEquals: {
+                "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
+              },
+            },
+          },
+        ],
       },
     },
   };
