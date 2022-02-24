@@ -1,7 +1,4 @@
-import {
-  kafkaConsumerEvent,
-  KafkaEventKey,
-} from "@functions/kafka-consumer-events";
+import { kafkaConsumerEvent } from "@functions/kafka-consumer-events";
 import { handlerPath } from "@libs/lambda-utils";
 import { ResourcePrefix } from "serverless/constants";
 
@@ -10,7 +7,7 @@ export const kafkaConsumerFactory = (resource_prefix: ResourcePrefix) => {
     tags: { stage: "kafka-consumer-${self:custom.stage}" },
     timeout: 300,
     handler: `${handlerPath(__dirname)}/handler.main`,
-    events: [kafkaConsumerEvent(KafkaEventKey.BIOCHEMICAL)],
+    events: [kafkaConsumerEvent(resource_prefix)],
     environment: {
       SNS_TOPIC_ARN: {
         Ref: resource_prefix + "SNSTopic",
