@@ -40,13 +40,13 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
         Statement: {
           Effect: "Allow",
           Principal: "*",
-          Action: ["sqs:SendMessage"],
-          Resource: { Ref: resource_prefix + "FifoSQS" },
-          Condition: {
-            ArnEquals: {
-              "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
-            },
-          },
+          Action: ["sqs:SendMessage", "sqs:ReceiveMessage"],
+          Resource: { "Fn::GetAtt": [resource_prefix + "FifoSQS", "Arn"] },
+          // Condition: {
+          //   ArnEquals: {
+          //     "aws:SourceArn": { Ref: resource_prefix + "SNSTopic" },
+          //   },
+          // },
         },
       },
     },
