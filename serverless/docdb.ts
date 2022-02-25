@@ -1,8 +1,9 @@
+import { Constants } from "./constants";
 export const docdbResources = (serviceName: string, stage: string) => {
   const resources = {};
   const prefix = serviceName.toLowerCase();
   const suffix = stage.toLowerCase();
-  const admin_user = "admin";
+  const admin_user = Constants.DOCDB_ADMIN_USERNAME;
   // cluster
   resources["DocdbCluster"] = {
     Type: "AWS::DocDB::DBCluster",
@@ -63,15 +64,9 @@ export const docdbResources = (serviceName: string, stage: string) => {
   resources["DocdbSubnets"] = {
     Type: "AWS::DocDB::DBSubnetGroup",
     Properties: {
+      DBSubnetGroupDescription: prefix + "-docdb-subnet-group-" + suffix,
       DBSubnetGroupName: prefix + "-docdb-subnet-group-" + suffix,
-      SubnetIds:
-        "{{resolve:ssm:/terraform/vpc/subnets/private_service_subnets}}",
-      // // hard coded
-      //   SubnetIds: [
-      //     "subnet-0f817f6243b421ef3",
-      //     "subnet-0fd375c1cccf965aa",
-      //     "subnet-0484aafcd8868aea1",
-      //   ], //todo get the private subnets
+      SubnetIds: "${ssm:/terraform/vpc/subnets/private_service_subnets}",
       Tags: [
         {
           Key: "System",
@@ -111,7 +106,7 @@ export const docdbResources = (serviceName: string, stage: string) => {
       Name: prefix + "-docdb-credentials-" + suffix,
       Description: "master password for docdb",
       GenerateSecretString: {
-        SecretStringTemplate: '{"username":' + admin_user + "}",
+        SecretStringTemplate: `{"username":\"${admin_user}\"}`,
         GenerateStringKey: "password",
         PasswordLength: 30,
         ExcludeCharacters: '"@/\\',
@@ -143,39 +138,39 @@ export const docdbResources = (serviceName: string, stage: string) => {
     },
   };
 
-  resources["DocdbInstance1"] = {
-    Type: "AWS::DocDB::DBInstance",
-    Properties: {
-      DBClusterIdentifier: {
-        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
-      },
-      DBInstanceClass: "db.r5.2xlarge",
-      DBInstanceIdentifier: prefix + "-docdb-cluster-instances-1",
-      Tags: [
-        {
-          Key: "System",
-          Value: prefix + "-" + suffix,
-        },
-      ],
-    },
-  };
+  //   resources["DocdbInstance1"] = {
+  //     Type: "AWS::DocDB::DBInstance",
+  //     Properties: {
+  //       DBClusterIdentifier: {
+  //         "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
+  //       },
+  //       DBInstanceClass: "db.r5.2xlarge",
+  //       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-1",
+  //       Tags: [
+  //         {
+  //           Key: "System",
+  //           Value: prefix + "-" + suffix,
+  //         },
+  //       ],
+  //     },
+  //   };
 
-  resources["DocdbInstance2"] = {
-    Type: "AWS::DocDB::DBInstance",
-    Properties: {
-      DBClusterIdentifier: {
-        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
-      },
-      DBInstanceClass: "db.r5.2xlarge",
-      DBInstanceIdentifier: prefix + "-docdb-cluster-instances-2",
-      Tags: [
-        {
-          Key: "System",
-          Value: prefix + "-" + suffix,
-        },
-      ],
-    },
-  };
+  //   resources["DocdbInstance2"] = {
+  //     Type: "AWS::DocDB::DBInstance",
+  //     Properties: {
+  //       DBClusterIdentifier: {
+  //         "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
+  //       },
+  //       DBInstanceClass: "db.r5.2xlarge",
+  //       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-2",
+  //       Tags: [
+  //         {
+  //           Key: "System",
+  //           Value: prefix + "-" + suffix,
+  //         },
+  //       ],
+  //     },
+  //   };
 
   // outputs
   const outputs = {};
