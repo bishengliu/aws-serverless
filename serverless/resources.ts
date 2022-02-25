@@ -1,6 +1,6 @@
 import { parameterResources } from "./parameters";
 import { consumerResources } from "./consumer-resources";
-import { ResourcePrefix, Constants } from "./constants";
+import { ResourcePrefix } from "./constants";
 import { docdbResources } from "./docdb";
 
 export const resources = (stage: string) => {

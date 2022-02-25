@@ -2,18 +2,18 @@ import { sqsConsumerFactory, kafkaConsumerFactory } from "../src/functions";
 import { ResourcePrefix } from "./constants";
 
 const functionGroups = (
-  resourcePrefix: ResourcePrefix,
-  stage: string = "poc"
+  resourcePrefix: ResourcePrefix
+  // stage: string = "poc"
 ) => {
   const kafkaConsumer = kafkaConsumerFactory(resourcePrefix);
   const sqsConsumer = sqsConsumerFactory(resourcePrefix);
 
   return {
-    [resourcePrefix + "-kafka-consumer-" + stage]: kafkaConsumer,
-    [resourcePrefix + "-sqs-consumer-" + stage]: sqsConsumer,
+    [resourcePrefix + "-kafka-consumer"]: kafkaConsumer,
+    [resourcePrefix + "-sqs-consumer"]: sqsConsumer,
   };
 };
 
-export const functions = (stage: string) => ({
-  ...functionGroups(ResourcePrefix.BIOCHEMICAL, stage.toLowerCase()),
-});
+export const functions = {
+  ...functionGroups(ResourcePrefix.BIOCHEMICAL),
+};
