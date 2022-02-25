@@ -1,4 +1,4 @@
-import { kafkaConsumerEvent } from "@functions/kafka-consumer-events";
+import { kafkaConsumerEvent } from "@functions/kafka-consumer/kafka-consumer-events";
 import { handlerPath } from "@libs/lambda-utils";
 import { ResourcePrefix } from "serverless/constants";
 
