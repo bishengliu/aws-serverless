@@ -2,6 +2,7 @@ export enum ResourcePrefix {
   BIOCHEMICAL = "biochemical",
 }
 
-export type Constants = {
-  SERVICE_NAME: "search-ephemeral";
+export const Constants = {
+  SERVICE_NAME: "search-ephemeral",
+  DOCDB_ADMIN_USERNAME: "admin",
 };

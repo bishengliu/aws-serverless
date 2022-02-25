@@ -1,21 +1,19 @@
-import { Constants } from "./constants";
-
 export const docdbResources = (serviceName: string, stage: string) => {
   const resources = {};
   const prefix = serviceName.toLowerCase();
   const suffix = stage.toLowerCase();
   const admin_user = "admin";
   // cluster
-  resources[prefix + "-docdb-cluster-" + suffix] = {
+  resources["DocdbCluster"] = {
     Type: "AWS::DocDB::DBCluster",
     Properties: {
       BackupRetentionPeriod: 8,
       DBClusterIdentifier: prefix + "-docdb-cluster-" + suffix,
       DBClusterParameterGroupName: {
-        Ref: prefix + "-docdb-cluster-parameter-group-" + suffix,
+        Ref: "DocdbClusterParameterGroup",
       },
       DBSubnetGroupName: {
-        Ref: prefix + "-docdb-subnet-group-" + suffix,
+        Ref: "DocdbSubnets",
       },
       StorageEncrypted: true,
       Port: "27017",
@@ -25,12 +23,12 @@ export const docdbResources = (serviceName: string, stage: string) => {
           "",
           [
             "{{resolve:secretsmanager:",
-            { Ref: prefix + "-docdb-credentials-" + suffix },
+            { Ref: "DocdbCredentials" },
             ":SecretString:password}}",
           ],
         ],
       },
-      VpcSecurityGroupIds: [], // todo ec2 sg ids
+      VpcSecurityGroupIds: [{ Ref: "DocdbSecurityGroup" }],
       Tags: [
         {
           Key: "System",
@@ -41,17 +39,18 @@ export const docdbResources = (serviceName: string, stage: string) => {
   };
 
   // parameter group
-  resources[prefix + "-docdb-cluster-parameter-group-" + suffix] = {
+  resources["DocdbClusterParameterGroup"] = {
     Type: "AWS::DocDB::DBClusterParameterGroup",
     Properties: {
       Description: prefix + "-docdb-cluster-parameter-group-" + suffix,
       Family: "docdb4.0",
       Name: prefix + "-docdb-cluster-parameter-group-" + suffix,
-      Parameters: [
-        { audit_logs: "disabled" },
-        { tls: "enabled" },
-        { ttl_monitor: "enabled" },
-      ],
+      //   Parameters: [
+      //     // need to check this
+      //     { audit_logs: "disabled" },
+      //     { tls: "enabled" },
+      //     { ttl_monitor: "enabled" },
+      //   ],
       Tags: [
         {
           Key: "System",
@@ -62,11 +61,18 @@ export const docdbResources = (serviceName: string, stage: string) => {
   };
 
   // subnet group
-  resources[prefix + "-docdb-subnet-group-" + suffix] = {
+  resources["DocdbSubnets"] = {
     Type: "AWS::DocDB::DBSubnetGroup",
     Properties: {
       DBSubnetGroupName: prefix + "-docdb-subnet-group-" + suffix,
-      SubnetIds: [], //todo get the private subnets
+      SubnetIds:
+        "{{resolve:ssm:/terraform/vpc/subnets/private_service_subnets}}",
+      // // hard coded
+      //   SubnetIds: [
+      //     "subnet-0f817f6243b421ef3",
+      //     "subnet-0fd375c1cccf965aa",
+      //     "subnet-0484aafcd8868aea1",
+      //   ], //todo get the private subnets
       Tags: [
         {
           Key: "System",
@@ -77,9 +83,30 @@ export const docdbResources = (serviceName: string, stage: string) => {
   };
 
   // ec2 security group
-
+  resources["DocdbSecurityGroup"] = {
+    Type: "AWS::EC2::SecurityGroup",
+    Properties: {
+      GroupDescription: prefix + "-docdb-security-group-" + suffix,
+      GroupName: prefix + "-docdb-security-group-" + suffix,
+      VpcId: "{{resolve:ssm:/terraform/vpc_id}}",
+      SecurityGroupIngress: [
+        {
+          IpProtocol: "tcp",
+          FromPort: 27017,
+          ToPort: 27017,
+          CidrIp: "0.0.0.0/0",
+        },
+      ],
+      Tags: [
+        {
+          Key: "System",
+          Value: prefix + "-" + suffix,
+        },
+      ],
+    },
+  };
   // generate username and password and save to ssm
-  resources[prefix + "-docdb-credentials-" + suffix] = {
+  resources["DocdbCredentials"] = {
     Type: "AWS::SecretsManager::Secret",
     Properties: {
       Name: prefix + "-docdb-credentials-" + suffix,
@@ -99,17 +126,12 @@ export const docdbResources = (serviceName: string, stage: string) => {
     },
   };
 
-  // retrieve private subnet from ssm
-
   // instances
-  resources[prefix + "-docdb-instance0-" + suffix] = {
+  resources["DocdbInstance0"] = {
     Type: "AWS::DocDB::DBInstance",
     Properties: {
       DBClusterIdentifier: {
-        "Fn::GetAtt": [
-          prefix + "-docdb-cluster-" + suffix,
-          "ClusterResourceId",
-        ],
+        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
       },
       DBInstanceClass: "db.r5.2xlarge",
       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-0",
@@ -122,14 +144,11 @@ export const docdbResources = (serviceName: string, stage: string) => {
     },
   };
 
-  resources[prefix + "-docdb-instance1-" + suffix] = {
+  resources["DocdbInstance1"] = {
     Type: "AWS::DocDB::DBInstance",
     Properties: {
       DBClusterIdentifier: {
-        "Fn::GetAtt": [
-          prefix + "-docdb-cluster-" + suffix,
-          "ClusterResourceId",
-        ],
+        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
       },
       DBInstanceClass: "db.r5.2xlarge",
       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-1",
@@ -142,14 +161,11 @@ export const docdbResources = (serviceName: string, stage: string) => {
     },
   };
 
-  resources[prefix + "-docdb-instance2-" + suffix] = {
+  resources["DocdbInstance2"] = {
     Type: "AWS::DocDB::DBInstance",
     Properties: {
       DBClusterIdentifier: {
-        "Fn::GetAtt": [
-          prefix + "-docdb-cluster-" + suffix,
-          "ClusterResourceId",
-        ],
+        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
       },
       DBInstanceClass: "db.r5.2xlarge",
       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-2",
