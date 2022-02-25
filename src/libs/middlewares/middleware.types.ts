@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { Db } from "mongodb";
 import { Context } from "aws-lambda";
 import SchemaRegistry from "@libs/confluent-schema-registry/src/lib/SchemaRegistry";
 // import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
@@ -8,7 +8,7 @@ type KafkaConsumerContext = {
 } & Context;
 
 type SQSConsumerContext = {
-  mongoClient: MongoClient;
+  database: Db;
 } & Context;
 
 export { KafkaConsumerContext, SQSConsumerContext };

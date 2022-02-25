@@ -15,7 +15,11 @@ const mongoClientMiddleware = (
   const mongoClientMiddlewareBefore = async (
     handler: middy.HandlerLambda<SQSKafkaEvent, void, SQSConsumerContext>
   ) => {
-    handler.context.mongoClient = await factory.create();
+    if (!process.env.DOCDB_DB)
+      throw new Error("missing process.env.DOCDB_DB for the docdb database!");
+    const mongoClient = await factory.create();
+    handler.context.database = mongoClient.db(process.env.DOCDB_DB);
+    logger.info(handler.context.database);
   };
   return {
     before: mongoClientMiddlewareBefore,
