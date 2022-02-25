@@ -45,12 +45,11 @@ export const docdbResources = (serviceName: string, stage: string) => {
       Description: prefix + "-docdb-cluster-parameter-group-" + suffix,
       Family: "docdb4.0",
       Name: prefix + "-docdb-cluster-parameter-group-" + suffix,
-      //   Parameters: [
-      //     // need to check this
-      //     { audit_logs: "disabled" },
-      //     { tls: "enabled" },
-      //     { ttl_monitor: "enabled" },
-      //   ],
+      Parameters: {
+        audit_logs: "disabled",
+        tls: "enabled",
+        ttl_monitor: "enabled",
+      },
       Tags: [
         {
           Key: "System",
