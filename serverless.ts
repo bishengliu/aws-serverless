@@ -96,7 +96,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { ...functions },
+  functions: { ...functions("${self:custom.stage}") },
   package: { individually: true },
   custom: {
     stage: "${opt:stage, 'poc'}",
@@ -127,7 +127,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    ...resources,
+    ...resources("${self:custom.stage}"),
   },
 };
 

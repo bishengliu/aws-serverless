@@ -1,7 +1,7 @@
 import { Constants } from "./constants";
-export const docdbResources = (serviceName: string, stage: string) => {
+export const docdbResources = (stage: string) => {
   const resources = {};
-  const prefix = serviceName.toLowerCase();
+  const prefix = Constants.SERVICE_NAME.toLowerCase();
   const suffix = stage.toLowerCase();
   const admin_user = Constants.DOCDB_ADMIN_USERNAME;
   // cluster
