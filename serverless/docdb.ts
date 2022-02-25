@@ -125,7 +125,7 @@ export const docdbResources = (serviceName: string, stage: string) => {
     Type: "AWS::DocDB::DBInstance",
     Properties: {
       DBClusterIdentifier: {
-        "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
+        Ref: "DocdbCluster",
       },
       DBInstanceClass: "db.r5.2xlarge",
       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-0",
@@ -138,39 +138,39 @@ export const docdbResources = (serviceName: string, stage: string) => {
     },
   };
 
-  //   resources["DocdbInstance1"] = {
-  //     Type: "AWS::DocDB::DBInstance",
-  //     Properties: {
-  //       DBClusterIdentifier: {
-  //         "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
-  //       },
-  //       DBInstanceClass: "db.r5.2xlarge",
-  //       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-1",
-  //       Tags: [
-  //         {
-  //           Key: "System",
-  //           Value: prefix + "-" + suffix,
-  //         },
-  //       ],
-  //     },
-  //   };
+  resources["DocdbInstance1"] = {
+    Type: "AWS::DocDB::DBInstance",
+    Properties: {
+      DBClusterIdentifier: {
+        Ref: "DocdbCluster",
+      },
+      DBInstanceClass: "db.r5.2xlarge",
+      DBInstanceIdentifier: prefix + "-docdb-cluster-instances-1",
+      Tags: [
+        {
+          Key: "System",
+          Value: prefix + "-" + suffix,
+        },
+      ],
+    },
+  };
 
-  //   resources["DocdbInstance2"] = {
-  //     Type: "AWS::DocDB::DBInstance",
-  //     Properties: {
-  //       DBClusterIdentifier: {
-  //         "Fn::GetAtt": ["DocdbCluster", "ClusterResourceId"],
-  //       },
-  //       DBInstanceClass: "db.r5.2xlarge",
-  //       DBInstanceIdentifier: prefix + "-docdb-cluster-instances-2",
-  //       Tags: [
-  //         {
-  //           Key: "System",
-  //           Value: prefix + "-" + suffix,
-  //         },
-  //       ],
-  //     },
-  //   };
+  resources["DocdbInstance2"] = {
+    Type: "AWS::DocDB::DBInstance",
+    Properties: {
+      DBClusterIdentifier: {
+        Ref: "DocdbCluster",
+      },
+      DBInstanceClass: "db.r5.2xlarge",
+      DBInstanceIdentifier: prefix + "-docdb-cluster-instances-2",
+      Tags: [
+        {
+          Key: "System",
+          Value: prefix + "-" + suffix,
+        },
+      ],
+    },
+  };
 
   // outputs
   const outputs = {};
