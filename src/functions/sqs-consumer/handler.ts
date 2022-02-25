@@ -1,6 +1,7 @@
 import {
   mongoClientMiddleware,
   mongoCollectionMiddleware,
+  mongoEnsureIndexingMiddleware,
   SQSConsumerContext,
 } from "@libs/middlewares";
 import { SQSKafkaEvent } from "@libs/types/sqs.types";
@@ -19,4 +20,5 @@ const eventHandler = async (
 
 export const main = middy(eventHandler)
   .use(mongoClientMiddleware())
-  .use(mongoCollectionMiddleware());
+  .use(mongoCollectionMiddleware())
+  .use(mongoEnsureIndexingMiddleware());
