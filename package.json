@@ -20,6 +20,7 @@
     "@middy/http-json-body-parser": "^1.5.2",
     "@middy/util": "^2.5.7",
     "esbuild": "^0.14.21",
+    "mongodb": "^4.4.0",
     "serverless-stack-output": "^0.2.3"
   },
   "devDependencies": {
