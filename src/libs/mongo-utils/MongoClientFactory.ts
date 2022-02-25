@@ -1,4 +1,5 @@
 import { MongoClient, ReadPreferenceMode, MongoClientOptions } from "mongodb";
+import { handlerPath } from "@libs/lambda-utils";
 class MongoClientFactory {
   private static instance: MongoClient | undefined;
 
@@ -18,7 +19,7 @@ class MongoClientFactory {
     const connectionString = `mongodb://${process.env.DOCDB_URL}/`;
     const connectOptions: MongoClientOptions = {
       tls: true,
-      tlsCAFile: "rds-combined-ca-bundle.pem",
+      tlsCAFile: `${handlerPath(__dirname)}/rds-combined-ca-bundle.pem`,
       auth: {
         username: process.env.DOCDB_USER,
         password: process.env.DOCDB_PASSWORD,
