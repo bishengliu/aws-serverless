@@ -22,6 +22,7 @@ const mongoCollectionMiddleware = (
       handler.context.database
     );
     handler.context.collectionConfig = factory.getCollectionConfig();
+    handler.context.primaryKeyPath = factory.getPrimaryKeyPath();
   };
 
   return {

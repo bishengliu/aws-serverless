@@ -4,6 +4,7 @@ import {
   mongoEnsureIndexingMiddleware,
   SQSConsumerContext,
 } from "@libs/middlewares";
+import { mongoUpsert } from "@libs/mongo-utils/mongoUpsert";
 import { SQSKafkaEvent } from "@libs/types/sqs.types";
 import middy from "@middy/core";
 
@@ -15,7 +16,10 @@ const eventHandler = async (
   context: SQSConsumerContext
 ) => {
   const records = event.Records.flatMap((record) => record.body);
-  console.log(records);
+
+  for (let record of records) {
+    await mongoUpsert(record, context);
+  }
 };
 
 export const main = middy(eventHandler)

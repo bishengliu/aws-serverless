@@ -10,6 +10,21 @@ class MongoCollectionFactory {
   private static collection: Collection<Document> | undefined;
   private static collectionConfig: CollectionConfig | undefined;
   private static collectionName: MONGO_COLLECTION | undefined;
+  private static primaryKeyPath: string | undefined;
+
+  public getPrimaryKeyPath(): string {
+    if (MongoCollectionFactory.primaryKeyPath)
+      return MongoCollectionFactory.primaryKeyPath;
+
+    this.validateResourceTopic();
+
+    const collectionPrimaryKeyPathPair: CollectionPrimaryKeyPathPair =
+      resourceToCollectionPrimaryKeyPair[process.env.RESOURCE_TOPIC];
+    MongoCollectionFactory.primaryKeyPath =
+      collectionPrimaryKeyPathPair.primaryKeyPath;
+
+    return MongoCollectionFactory.primaryKeyPath;
+  }
 
   public getCollectionName(): MONGO_COLLECTION {
     if (MongoCollectionFactory.collectionName)

@@ -14,6 +14,7 @@ type SQSConsumerContext = {
   collection: Collection<Document> | undefined;
   collectionConfig: CollectionConfig | undefined;
   collectionName: MONGO_COLLECTION | undefined;
+  primaryKeyPath: string;
   indexingEsnured: boolean;
 } & Context;
 
