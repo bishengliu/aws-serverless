@@ -2,22 +2,26 @@ import { MongoClient, ReadPreferenceMode, MongoClientOptions } from "mongodb";
 class MongoClientFactory {
   private static instance: MongoClient | undefined;
 
-  public constructor(
-    private readonly docdbUri: string,
-    private readonly username: string,
-    private readonly password: string
-  ) {}
-
   public async create() {
     if (MongoClientFactory.instance) return MongoClientFactory.instance;
 
-    const connectionString = `mongodb://${this.docdbUri}/`;
+    if (
+      !process.env.DOCDB_URL ||
+      !process.env.DOCDB_USER ||
+      !process.env.DOCDB_PASSWORD
+    ) {
+      throw new Error(
+        "fail to create mongo client: missing process.env.DOCDB_URL, process.env.DOCDB_USER or process.env.DOCDB_PASSWORD"
+      );
+    }
+
+    const connectionString = `mongodb://${process.env.DOCDB_URL}/`;
     const connectOptions: MongoClientOptions = {
       tls: true,
       tlsCAFile: "rds-combined-ca-bundle.pem",
       auth: {
-        username: this.username,
-        password: this.password,
+        username: process.env.DOCDB_USER,
+        password: process.env.DOCDB_PASSWORD,
       },
       monitorCommands: true,
       retryWrites: false, // DocumentDB does not support retryWrites
@@ -30,3 +34,5 @@ class MongoClientFactory {
     return MongoClientFactory.instance;
   }
 }
+
+export default MongoClientFactory;

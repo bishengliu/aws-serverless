@@ -1,3 +1,4 @@
+import { mongoClientMiddleware } from "@libs/middlewares";
 import { SQSKafkaEvent } from "@libs/types/sqs.types";
 import middy from "@middy/core";
 
@@ -9,4 +10,4 @@ const eventHandler = async (event: SQSKafkaEvent) => {
   console.log(records);
 };
 
-export const main = middy(eventHandler);
+export const main = middy(eventHandler).use(mongoClientMiddleware());
