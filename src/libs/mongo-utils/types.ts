@@ -1,10 +1,12 @@
+import { ResourcePrefix, MONGO_COLLECTION } from "serverless/constants";
+
 export type CollectionPrimaryKeyPathPair = {
-  collection: string;
+  collection: MONGO_COLLECTION;
   primaryKeyPath: string;
 };
 
-export type TopicToCollectionPrimaryKeyPair = Record<
-  string, //kafka topic names
+export type ResourceToCollectionPrimaryKeyPair = Record<
+  ResourcePrefix, //kafka topic names
   CollectionPrimaryKeyPathPair
 >;
 

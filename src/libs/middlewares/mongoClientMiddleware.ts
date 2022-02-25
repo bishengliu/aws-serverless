@@ -1,5 +1,5 @@
 const logger = require("@dazn/lambda-powertools-logger");
-import MongoClientFactory from "@libs/mongo-utils/mongoClientFactory";
+import { MongoClientFactory } from "@libs/mongo-utils";
 import { SQSKafkaEvent } from "@libs/types/sqs.types";
 import middy from "@middy/core";
 import { SQSConsumerContext } from "./middleware.types";

@@ -22,6 +22,7 @@ export const sqsConsumerFactory = (resource_prefix: ResourcePrefix) => {
       },
     ],
     environment: {
+      RESOURCE_TOPIC: resource_prefix,
       DOCDB_URL: "",
       DOCDB_DB: "",
       DOCDB_USER: "",

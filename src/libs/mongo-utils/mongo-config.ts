@@ -1,5 +1,5 @@
-import { ResourcePrefix } from "serverless/constants";
-import { CollectionsConfig, TopicToCollectionPrimaryKeyPair } from "./types";
+import { MONGO_COLLECTION, ResourcePrefix } from "serverless/constants";
+import { CollectionsConfig, ResourceToCollectionPrimaryKeyPair } from "./types";
 
 const {
   ASSET,
@@ -12,71 +12,72 @@ const {
   STANDARD_PROTEIN,
   TARGET,
   TAXON,
-} = ResourcePrefix;
+} = MONGO_COLLECTION;
 
-export const topicToCollectionPrimaryKeyPair: TopicToCollectionPrimaryKeyPair =
+export const resourceToCollectionPrimaryKeyPair: ResourceToCollectionPrimaryKeyPair =
   {
-    "product.asset_definition.component": {
+    [ResourcePrefix.COMPONENT]: {
       primaryKeyPath: "component.componentNumber",
       collection: COMPONENT,
     },
-    "product.asset_definition.core": {
+    [ResourcePrefix.CORE]: {
       primaryKeyPath: "core.assetDefinitionNumber",
       collection: ASSET_DEFINITION,
     },
-    "product.asset_definition.scientific": {
+    [ResourcePrefix.SCIENTIFIC]: {
       primaryKeyPath: "scientific.assetDefinitionNumber",
       collection: ASSET_DEFINITION,
     },
-    "product.asset_definition.quality_score": {
+    [ResourcePrefix.QUALITY_SCORE]: {
       primaryKeyPath: "qualityScore.assetDefinitionNumber",
       collection: ASSET_DEFINITION,
     },
-    "product.asset_definition.product_image": {
+    [ResourcePrefix.PRODUCT_IMAGE]: {
       primaryKeyPath: "productImage.imageNumber",
       collection: PRODUCT_IMAGE,
     },
-    "product.asset_definition.image_quality_score": {
+    [ResourcePrefix.IMAGE_QUALITY_SCORE]: {
       primaryKeyPath: "imageQualityScore.productImageNumber",
       collection: PRODUCT_IMAGE,
     },
-    "product.asset_definition.reference": {
+    [ResourcePrefix.REFERENCE]: {
       primaryKeyPath: "reference.referenceNumber",
       collection: REFERENCE,
     },
-    "product.asset.asset_component": {
+    [ResourcePrefix.ASSET_COMPONENT]: {
       primaryKeyPath: "assetComponent.assetComponentNumber",
       collection: ASSET_COMPONENT,
     },
-    "product.asset.asset": {
+    [ResourcePrefix.ASSET]: {
       primaryKeyPath: "asset.assetNumber",
       collection: ASSET,
     },
-    "target.biochemical": {
+    [ResourcePrefix.BIOCHEMICAL]: {
       primaryKeyPath: "biochemical.biochemicalNumber",
       collection: BIOCHEMICAL,
     },
-    "target.target": {
+    [ResourcePrefix.TARGET]: {
       primaryKeyPath: "target.targetNumber",
       collection: TARGET,
     },
-    "target.standard_protein": {
+    [ResourcePrefix.STANDARD_PROTEIN]: {
       primaryKeyPath: "standardProtein.standardProteinNumber",
       collection: STANDARD_PROTEIN,
     },
-    "target.taxon": {
+    [ResourcePrefix.TAXON]: {
       primaryKeyPath: "taxon.taxonNumber",
       collection: TAXON,
     },
+    [ResourcePrefix.ASSET_DEFINITION]: undefined,
   };
 
 export const collectionsConfig: CollectionsConfig = {
-  component: {
+  [COMPONENT]: {
     // contains: component
     primaryKeyName: "componentNumber",
     version: 1,
   },
-  assetDefinition: {
+  [ASSET_DEFINITION]: {
     // contains: core, scientific, quality-score
     primaryKeyName: "assetDefinitionNumber",
     secondaryIndices: [
@@ -88,7 +89,7 @@ export const collectionsConfig: CollectionsConfig = {
     publishDataChanged: true,
     version: 1,
   },
-  productImage: {
+  [PRODUCT_IMAGE]: {
     // contains: product-image, image-quality-score
     primaryKeyName: "productImageNumber",
     secondaryIndices: [
@@ -100,7 +101,7 @@ export const collectionsConfig: CollectionsConfig = {
     publishDataChanged: true,
     version: 1,
   },
-  reference: {
+  [REFERENCE]: {
     // contains: reference
     primaryKeyName: "referenceNumber",
     secondaryIndices: [
@@ -112,12 +113,12 @@ export const collectionsConfig: CollectionsConfig = {
     publishDataChanged: true,
     version: 1,
   },
-  assetComponent: {
+  [ASSET_COMPONENT]: {
     // contains: asset-component
     primaryKeyName: "assetComponentNumber",
     version: 1,
   },
-  asset: {
+  [ASSET]: {
     // contains: asset
     primaryKeyName: "assetNumber",
     secondaryIndices: [
@@ -129,23 +130,23 @@ export const collectionsConfig: CollectionsConfig = {
     publishDataChanged: true,
     version: 1,
   },
-  biochemical: {
+  [BIOCHEMICAL]: {
     // contains: biochemical
     primaryKeyName: "biochemicalNumber",
     version: 1,
   },
-  target: {
+  [TARGET]: {
     // contains: target
     primaryKeyName: "targetNumber",
     publishDataChanged: true,
     version: 1,
   },
-  standardProtein: {
+  [STANDARD_PROTEIN]: {
     // contains: standard-protein
     primaryKeyName: "standardProteinNumber",
     version: 1,
   },
-  taxon: {
+  [TAXON]: {
     // contains: taxon
     primaryKeyName: "taxonNumber",
     version: 1,

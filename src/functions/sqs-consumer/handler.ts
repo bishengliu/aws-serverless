@@ -1,4 +1,8 @@
-import { mongoClientMiddleware, SQSConsumerContext } from "@libs/middlewares";
+import {
+  mongoClientMiddleware,
+  mongoCollectionMiddleware,
+  SQSConsumerContext,
+} from "@libs/middlewares";
 import { SQSKafkaEvent } from "@libs/types/sqs.types";
 import middy from "@middy/core";
 
@@ -13,4 +17,6 @@ const eventHandler = async (
   console.log(records);
 };
 
-export const main = middy(eventHandler).use(mongoClientMiddleware());
+export const main = middy(eventHandler)
+  .use(mongoClientMiddleware())
+  .use(mongoCollectionMiddleware());

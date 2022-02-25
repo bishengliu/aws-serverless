@@ -1,3 +1,16 @@
+export enum MONGO_COLLECTION {
+  ASSET = "asset",
+  ASSET_COMPONENT = "assetComponent",
+  ASSET_DEFINITION = "assetDefinition",
+  BIOCHEMICAL = "biochemical",
+  COMPONENT = "component",
+  PRODUCT_IMAGE = "productImage",
+  REFERENCE = "reference",
+  STANDARD_PROTEIN = "standardProtein",
+  TARGET = "target",
+  TAXON = "taxon",
+}
+
 export enum ResourcePrefix {
   ASSET = "asset",
   ASSET_COMPONENT = "assetComponent",
