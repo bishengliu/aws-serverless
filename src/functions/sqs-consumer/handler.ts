@@ -18,7 +18,7 @@ const eventHandler = async (
   const records = event.Records.flatMap((record) => record.body);
 
   for (let record of records) {
-    await mongoUpsert(record, context);
+    await mongoUpsert(record.value, context);
   }
 };
 
