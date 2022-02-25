@@ -1,7 +1,10 @@
 import { sqsConsumerFactory, kafkaConsumerFactory } from "../src/functions";
 import { ResourcePrefix } from "./constants";
 
-const functionGroups = (resourcePrefix: ResourcePrefix) => {
+const functionGroups = (
+  resourcePrefix: ResourcePrefix
+  // stage: string = "poc"
+) => {
   const kafkaConsumer = kafkaConsumerFactory(resourcePrefix);
   const sqsConsumer = sqsConsumerFactory(resourcePrefix);
 

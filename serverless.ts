@@ -1,9 +1,10 @@
 import type { AWS } from "@serverless/typescript";
 import { resources } from "./serverless/resources";
 import { functions } from "./serverless/functions";
+import { Constants } from "serverless/constants";
 
 const serverlessConfiguration: AWS = {
-  service: "search-ephemeral",
+  service: Constants.SERVICE_NAME.toLowerCase(),
   variablesResolutionMode: "20210326",
   frameworkVersion: "3",
   plugins: [
@@ -127,7 +128,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   resources: {
-    ...resources,
+    ...resources("${self:custom.stage}"),
   },
 };
 

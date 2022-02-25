@@ -1,17 +1,24 @@
 import { ResourcePrefix } from "./constants";
-export const consumerResources = (resource_prefix: ResourcePrefix) => {
+export const consumerResources = (
+  resource_prefix: ResourcePrefix,
+  stage: string = "poc"
+) => {
+  const suffix = stage.toLowerCase();
   const resources = {};
   //sns topic
   resources[resource_prefix + "SNSTopic"] = {
     Type: "AWS::SNS::Topic",
     Properties: {
       ContentBasedDeduplication: true,
-      DisplayName: `${resource_prefix.toLowerCase()}-topic.fifo`,
+      DisplayName: `${resource_prefix.toLowerCase()}-topic-${suffix}.fifo`,
       FifoTopic: true,
       Tags: [
-        { Key: "Name", Value: `${resource_prefix.toLowerCase()}-topic.fifo` },
+        {
+          Key: "Name",
+          Value: `${resource_prefix.toLowerCase()}-topic-${suffix}.fifo`,
+        },
       ],
-      TopicName: `${resource_prefix.toLowerCase()}-topic.fifo`,
+      TopicName: `${resource_prefix.toLowerCase()}-topic-${suffix}.fifo`,
     },
   };
 
@@ -19,14 +26,19 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
   resources[resource_prefix + "FifoSQS"] = {
     Type: "AWS::SQS::Queue",
     Properties: {
-      QueueName: `${resource_prefix.toLowerCase()}-sqs.fifo`,
+      QueueName: `${resource_prefix.toLowerCase()}-sqs-${suffix}.fifo`,
       FifoQueue: true,
       VisibilityTimeout: 180,
       RedrivePolicy: {
         deadLetterTargetArn: { "Fn::GetAtt": [resource_prefix + "DLQ", "Arn"] },
         maxReceiveCount: 3,
       },
-      Tags: [{ Key: "Name", Value: `${resource_prefix.toLowerCase()}` }],
+      Tags: [
+        {
+          Key: "Name",
+          Value: `${resource_prefix.toLowerCase()}-sqs-${suffix}`,
+        },
+      ],
     },
   };
 
@@ -34,10 +46,15 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
   resources[resource_prefix + "DLQ"] = {
     Type: "AWS::SQS::Queue",
     Properties: {
-      QueueName: `${resource_prefix.toLowerCase()}-dlq.fifo`,
+      QueueName: `${resource_prefix.toLowerCase()}-dlq-${suffix}.fifo`,
       FifoQueue: true,
       VisibilityTimeout: 160,
-      Tags: [{ Key: "Name", Value: `${resource_prefix.toLowerCase()}-dlq` }],
+      Tags: [
+        {
+          Key: "Name",
+          Value: `${resource_prefix.toLowerCase()}-dlq-${suffix}`,
+        },
+      ],
     },
   };
 
@@ -120,7 +137,7 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
   resources[resource_prefix + "SQSCloudWatchAlarm"] = {
     Type: "AWS::CloudWatch::Alarm",
     Properties: {
-      AlarmName: `${resource_prefix} + FifoSQS_AgeOfOldestMessage`,
+      AlarmName: `${resource_prefix}-FifoSQS-AgeOfOldestMessage-${suffix}`,
       AlarmDescription: `Alarms if the ${resource_prefix} SQS Queue has messages in it for too long`,
       ComparisonOperator: "GreaterThanThreshold",
       Dimensions: [
@@ -147,7 +164,7 @@ export const consumerResources = (resource_prefix: ResourcePrefix) => {
   resources[resource_prefix + "DLQApproximateNumberOfMessagesVisible"] = {
     Type: "AWS::CloudWatch::Alarm",
     Properties: {
-      AlarmName: `${resource_prefix}DLQ_ApproximateNumberOfMessagesVisible`,
+      AlarmName: `${resource_prefix}-DLQ-ApproximateNumberOfMessagesVisible-${suffix}`,
       AlarmDescription: `Alarms if the ${resource_prefix} DLQ has too many messages`,
       ComparisonOperator: "GreaterThanThreshold",
       Dimensions: [
