@@ -1,7 +1,9 @@
 # About the project
 
-This is a simple aws serverless project with the following resources:
+This is a simple aws serverless project with the following resources using serverless v3:
 Kafka -> lambda -> SNS -> SQS -> lambda -> docdb
+
+![design](design.jpeg)
 
 ## Installation/deployment instructions
 
