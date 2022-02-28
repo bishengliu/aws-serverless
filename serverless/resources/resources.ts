@@ -1,6 +1,7 @@
+import { lambdaVPCSecurityGroupResource } from "./lambda-vpc-securitygroup";
 import { parameterResources } from "./parameters";
 import { consumerResources } from "./consumer-resources";
-import { ResourcePrefix } from "./constants";
+import { ResourcePrefix } from "../constants";
 import { docdbResources } from "./docdb";
 
 export const resources = (stage: string) => {
@@ -11,20 +12,7 @@ export const resources = (stage: string) => {
       ...parameterResources(),
     },
     Resources: {
-      LambdaSecurityGroup: {
-        Type: "AWS::EC2::SecurityGroup",
-        Properties: {
-          GroupDescription: "Allow open egress to anywhere",
-          VpcId: "${self:custom.vpc.id}",
-          SecurityGroupEgress: {
-            IpProtocol: -1,
-            FromPort: 0,
-            ToPort: 0,
-            CidrIp: "0.0.0.0/0",
-          },
-          Tags: [{ Key: "Name", Value: "egress-sg" }],
-        },
-      },
+      ...lambdaVPCSecurityGroupResource, // lambda sg inside vpc
       ...docdb.resources,
       ...biochemicalStack.resources,
     },

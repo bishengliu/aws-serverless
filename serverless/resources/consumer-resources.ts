@@ -1,4 +1,4 @@
-import { ResourcePrefix } from "./constants";
+import { ResourcePrefix } from "../constants";
 export const consumerResources = (
   resource_prefix: ResourcePrefix,
   stage: string = "poc"

@@ -1,4 +1,4 @@
-import { Constants } from "./constants";
+import { Constants } from "../constants";
 export const docdbResources = (stage: string) => {
   const resources = {};
   const prefix = Constants.SERVICE_NAME.toLowerCase();
